@@ -10,11 +10,9 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            /* 全局过渡动画 - 确保所有元素属性变化都有平滑过渡 */
             transition: all 0.5s ease;
         }
 
-        /* 模式切换核心变量 */
         :root {
             --bg-primary: #000;
             --text-primary: #f0f0f0;
@@ -24,6 +22,9 @@
             --shadow-primary: rgba(0, 161, 214, 0.2);
             --shadow-secondary: rgba(0, 0, 0, 0.8);
             --overlay-bg: rgba(0, 0, 0, 0.85);
+            --announcement-bg: linear-gradient(135deg, rgba(0, 161, 214, 0.15), rgba(114, 137, 218, 0.15));
+            --announcement-text: #e0e0e0;
+            --announcement-title: #fff;
         }
 
         .light-mode {
@@ -35,6 +36,9 @@
             --shadow-primary: rgba(0, 120, 180, 0.15);
             --shadow-secondary: rgba(0, 0, 0, 0.1);
             --overlay-bg: rgba(255, 255, 255, 0.85);
+            --announcement-bg: linear-gradient(135deg, rgba(0, 120, 180, 0.1), rgba(114, 137, 218, 0.1));
+            --announcement-text: #555;
+            --announcement-title: #333;
         }
 
         body {
@@ -48,11 +52,8 @@
             position: relative;
             padding-bottom: 220px;
             padding-top: 120px;
-            /* 给body单独加强过渡动画 */
-            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* 模式切换按钮容器 - 固定在右上角 */
         .mode-switcher {
             position: fixed;
             top: 20px;
@@ -115,7 +116,7 @@
             left: 0;
             width: 100%;
             padding: 25px 0;
-            background: linear-gradient(135deg, rgba(0, 161, 214, 0.15), rgba(114, 137, 218, 0.15));
+            background: var(--announcement-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 2px solid;
@@ -170,13 +171,13 @@
         .announcement-title {
             font-size: 18px;
             font-weight: 600;
-            color: #fff;
+            color: var(--announcement-title);
             margin-bottom: 8px;
         }
 
         .announcement-text {
             font-size: 16px;
-            color: #e0e0e0;
+            color: var(--announcement-text);
             line-height: 1.5;
         }
 
@@ -193,9 +194,9 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: rgba(0,0,0,0.6);
-            border: 2px solid rgba(0, 161, 214, 0.5);
-            color: #999;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -204,21 +205,6 @@
             font-size: 18px;
             position: relative;
             pointer-events: auto;
-        }
-
-        .light-mode .announcement-close {
-            background: rgba(255,255,255,0.6);
-        }
-
-        .announcement-close::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 161, 214, 0.3);
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
 
         .announcement-close:hover {
@@ -247,6 +233,11 @@
             transition: opacity 0.6s ease-out;
             background: linear-gradient(135deg, #00a1d6, #7289da);
             box-shadow: 0 0 10px rgba(0, 161, 214, 0.8), 0 0 20px rgba(114, 137, 218, 0.5);
+        }
+
+        .light-mode .particle {
+            background: linear-gradient(135deg, #0078b4, #5a6fb8);
+            box-shadow: 0 0 10px rgba(0, 120, 180, 0.8), 0 0 20px rgba(90, 111, 184, 0.5);
         }
 
         @keyframes trail {
@@ -319,7 +310,7 @@
             transform: translateY(-50%);
             width: 48px;
             height: 48px;
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 50%;
             font-size: 20px;
@@ -331,10 +322,6 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: 10;
             animation: breathe 3s ease-in-out infinite;
-        }
-
-        .light-mode .carousel-btn {
-            background: rgba(255, 255, 255, 0.8);
         }
 
         @keyframes breathe {
@@ -591,11 +578,7 @@
         }
 
         .audio-playlist::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .light-mode .audio-playlist::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.5);
+            background: var(--card-bg);
         }
 
         .audio-playlist::-webkit-scrollbar-thumb {
@@ -651,7 +634,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: #00a1d6;
             cursor: pointer;
@@ -662,10 +645,6 @@
             font-size: 20px;
             position: relative;
             overflow: hidden;
-        }
-
-        .light-mode .audio-btn {
-            background: rgba(255, 255, 255, 0.8);
         }
 
         .audio-btn::before {
@@ -820,13 +799,9 @@
             left: 2px;
             right: 2px;
             bottom: 2px;
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--card-bg);
             border-radius: 48px;
             z-index: -1;
-        }
-
-        .light-mode .author-btn::before {
-            background: rgba(255, 255, 255, 0.8);
         }
 
         .author-btn:hover {
@@ -983,7 +958,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: rgba(0,0,0,0.8);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: #00a1d6;
             cursor: pointer;
@@ -994,10 +969,6 @@
             font-size: 20px;
             position: relative;
             overflow: hidden;
-        }
-
-        .light-mode .back-to-top {
-            background: rgba(255,255,255,0.8);
         }
 
         .back-to-top::before {
@@ -1032,13 +1003,9 @@
             font-size: 13px;
             color: var(--text-secondary);
             padding: 6px 12px;
-            background: rgba(0,0,0,0.5);
+            background: var(--card-bg);
             border-radius: 20px;
             border: 1px solid var(--border-color);
-        }
-
-        .light-mode .footer-status {
-            background: rgba(255,255,255,0.5);
         }
 
         .footer-status span {
@@ -1050,7 +1017,6 @@
             body {
                 padding-top: 160px;
                 padding-bottom: 280px;
-                cursor: default !important;
             }
             .particle {
                 display: block !important;
@@ -1117,7 +1083,6 @@
                 padding: 8px 18px;
                 font-size: 13px;
             }
-            /* 移动端模式按钮适配 */
             .mode-switcher {
                 top: 10px;
                 right: 10px;
@@ -1183,13 +1148,11 @@
     </style>
 </head>
 <body>
-    <!-- 模式切换按钮 -->
     <div class="mode-switcher">
         <button class="mode-btn active" id="darkModeBtn" title="黑夜模式">🌙</button>
         <button class="mode-btn" id="lightModeBtn" title="白天模式">☀️</button>
     </div>
 
-    <!-- 公告区域 -->
     <div class="announcement" id="announcement">
         <div class="announcement-wrap">
             <div class="announcement-content">
@@ -1204,7 +1167,6 @@
     </div>
 
     <div class="container">
-        <!-- 1. 大图轮播区域 -->
         <section class="carousel-section">
             <div class="carousel" id="carousel">
                 <div class="carousel-item active-slide">
@@ -1226,12 +1188,11 @@
             </div>
         </section>
 
-        <!-- 2. 6个竖版照片区域 -->
         <section class="photos-section">
             <h2 class="section-title">美滋滋小院六兄弟</h2>
             <div class="photos-wrapper">
                 <div class="photos-grid" id="photosGrid">
-                    <div class="photo-card" data-video="https://player.bilibili.com/player.html?aid=88320070&bvid=BV1bt411o7cQ&cid=150277190&page=1&autoplay=1">
+                    <div class="photo-card active" data-video="https://player.bilibili.com/player.html?aid=88320070&bvid=BV1bt411o7cQ&cid=150277190&page=1&autoplay=1">
                         <img src="xd\1.png" alt="照片1">
                     </div>
                     <div class="photo-card" data-video="https://player.bilibili.com/player.html?aid=97771775&bvid=BV17741127h6&cid=167557639&page=1&autoplay=1">
@@ -1253,7 +1214,6 @@
             </div>
         </section>
 
-        <!-- 3. 初始显示图片，点击小图后切换为视频 -->
         <section class="video-section">
             <h2 class="section-title">视频播放</h2>
             <div class="video-container" id="videoContainer">
@@ -1262,7 +1222,6 @@
             </div>
         </section>
 
-        <!-- 4. 炫酷音频播放器区域 -->
         <section class="audio-player-section">
             <h2 class="section-title">音乐播放器</h2>
             <div class="audio-player" id="audioPlayer">
@@ -1292,7 +1251,6 @@
         </section>
     </div>
 
-    <!-- 底部内容 -->
     <footer>
         <div class="footer-wrap">
             <div class="footer-info">
@@ -1309,7 +1267,6 @@
         </div>
     </footer>
 
-    <!-- 作者信息弹窗 -->
     <div class="author-modal" id="authorModal">
         <div class="modal-content">
             <div class="modal-text">此界面由AI开发 构思杨爽</div>
@@ -1319,22 +1276,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ========== 模式切换功能（修复核心逻辑） ==========
+            // ========== 模式切换功能 ==========
             const body = document.body;
             const darkModeBtn = document.getElementById('darkModeBtn');
             const lightModeBtn = document.getElementById('lightModeBtn');
             
-            // 初始化模式（优先读取本地存储，默认黑夜模式）
             function initMode() {
                 const savedMode = localStorage.getItem('pageMode');
-                if (savedMode === 'light') {
-                    enableLightMode();
-                } else {
-                    enableDarkMode();
-                }
+                savedMode === 'light' ? enableLightMode() : enableDarkMode();
             }
 
-            // 启用黑夜模式
             function enableDarkMode() {
                 body.classList.remove('light-mode');
                 darkModeBtn.classList.add('active');
@@ -1342,7 +1293,6 @@
                 localStorage.setItem('pageMode', 'dark');
             }
 
-            // 启用白天模式
             function enableLightMode() {
                 body.classList.add('light-mode');
                 lightModeBtn.classList.add('active');
@@ -1350,11 +1300,8 @@
                 localStorage.setItem('pageMode', 'light');
             }
 
-            // 绑定按钮点击事件
             darkModeBtn.addEventListener('click', enableDarkMode);
             lightModeBtn.addEventListener('click', enableLightMode);
-
-            // 初始化模式
             initMode();
 
             // ========== 鼠标粒子特效 ==========
@@ -1368,12 +1315,7 @@
                 const dx = x - lastX;
                 const dy = y - lastY;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 0.5) {
-                    lastX = x;
-                    lastY = y;
-                    return;
-                }
+                if (distance < 0.5) return;
 
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
@@ -1387,13 +1329,9 @@
                 const ty = (Math.random() - 0.5) * 15 - dy * 1.5;
                 particle.style.setProperty('--tx', `${tx}px`);
                 particle.style.setProperty('--ty', `${ty}px`);
-                
                 particle.style.animation = `trail 0.8s ease-out forwards`;
                 document.body.appendChild(particle);
-
-                setTimeout(() => {
-                    particle.remove();
-                }, 800);
+                setTimeout(() => particle.remove(), 800);
 
                 lastX = x;
                 lastY = y;
@@ -1414,32 +1352,23 @@
                 const fy = Math.sin(angle) * distance;
                 particle.style.setProperty('--fx', `${fx}px`);
                 particle.style.setProperty('--fy', `${fy}px`);
-                
                 particle.style.animation = `firework 1.2s ease-out forwards`;
                 document.body.appendChild(particle);
-
-                setTimeout(() => {
-                    particle.remove();
-                }, 1200);
+                setTimeout(() => particle.remove(), 1200);
             }
 
             document.addEventListener('mousemove', (e) => {
                 const now = Date.now();
                 if (now - window.lastParticleTime < particleInterval) return;
                 window.lastParticleTime = now;
-
                 for (let i = 0; i < particleCount; i++) {
-                    setTimeout(() => {
-                        createTrailParticle(e.clientX, e.clientY);
-                    }, i * 10);
+                    setTimeout(() => createTrailParticle(e.clientX, e.clientY), i * 10);
                 }
             });
 
             document.addEventListener('click', (e) => {
                 for (let i = 0; i < fireworkCount; i++) {
-                    setTimeout(() => {
-                        createFireworkParticle(e.clientX, e.clientY);
-                    }, i * 20);
+                    setTimeout(() => createFireworkParticle(e.clientX, e.clientY), i * 20);
                 }
             });
 
@@ -1447,16 +1376,10 @@
             const announcement = document.getElementById('announcement');
             const announcementClose = document.getElementById('announcementClose');
             localStorage.removeItem('announcementClosed');
-            announcement.style.display = 'block';
-            announcement.style.opacity = '1';
-            announcement.style.transform = 'translateY(0)';
-            announcement.classList.remove('hidden');
-
+            
             announcementClose.addEventListener('click', () => {
                 announcement.classList.add('hidden');
-                setTimeout(() => {
-                    announcement.style.display = 'none';
-                }, 300);
+                setTimeout(() => announcement.style.display = 'none', 300);
             });
 
             // ========== 轮播功能 ==========
@@ -1469,95 +1392,45 @@
             const totalItems = carouselItems.length;
 
             function updateSlideActiveState() {
-                carouselItems.forEach((item, i) => {
-                    item.classList.toggle('active-slide', i === currentIndex);
-                });
+                carouselItems.forEach((item, i) => item.classList.toggle('active-slide', i === currentIndex));
             }
 
             function goToSlide(index) {
-                if (index < 0) index = totalItems - 1;
-                if (index >= totalItems) index = 0;
-                
+                index = index < 0 ? totalItems - 1 : index >= totalItems ? 0 : index;
                 carousel.style.transform = `translateX(-${index * 100}%)`;
-                indicators.forEach((ind, i) => {
-                    ind.classList.toggle('active', i === index);
-                });
+                indicators.forEach((ind, i) => ind.classList.toggle('active', i === index));
                 currentIndex = index;
                 updateSlideActiveState();
             }
 
             updateSlideActiveState();
+            let autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
 
-            let autoPlay = setInterval(() => {
-                goToSlide(currentIndex + 1);
-            }, 5000);
-
-            prevBtn.addEventListener('click', () => {
-                clearInterval(autoPlay);
-                goToSlide(currentIndex - 1);
-                autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
-            });
-
-            nextBtn.addEventListener('click', () => {
-                clearInterval(autoPlay);
-                goToSlide(currentIndex + 1);
-                autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
-            });
-
-            indicators.forEach((ind) => {
-                ind.addEventListener('click', () => {
-                    clearInterval(autoPlay);
-                    goToSlide(parseInt(ind.dataset.index));
-                    autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
-                });
-            });
+            prevBtn.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(currentIndex - 1); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); });
+            nextBtn.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(currentIndex + 1); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); });
+            indicators.forEach(ind => ind.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(parseInt(ind.dataset.index)); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); }));
 
             // ========== 照片-视频联动功能 ==========
             const photoCards = document.querySelectorAll('.photo-card');
-            const videoContainer = document.getElementById('videoContainer');
             const initialImage = document.getElementById('initialImage');
             const videoIframe = document.getElementById('videoIframe');
 
-            photoCards.forEach((card, index) => {
+            photoCards.forEach(card => {
                 card.addEventListener('click', () => {
-                    // 切换卡片激活状态
                     photoCards.forEach(c => c.classList.remove('active'));
                     card.classList.add('active');
-                    
-                    // 显示视频，隐藏图片
                     initialImage.style.opacity = '0';
-                    const videoSrc = card.dataset.video;
-                    videoIframe.src = videoSrc;
+                    videoIframe.src = card.dataset.video;
                     videoIframe.classList.add('loaded');
-                    
-                    // 确保iframe正确显示
-                    setTimeout(() => {
-                        initialImage.style.display = 'none';
-                    }, 500);
+                    setTimeout(() => initialImage.style.display = 'none', 500);
                 });
-
-                if (index === 0) {
-                    card.classList.add('active');
-                }
             });
 
-            // ========== 音频播放器功能 ==========
+            // ========== 音频播放器功能（核心修复） ==========
             const audioTracks = [
-                {
-                    title: "音乐1 - 最近比较烦",
-                    artist: "五哥",
-                    src: "audio/1.mp3"
-                },
-                {
-                    title: "音乐2 - 鬼迷了心窍",
-                    artist: "五哥",
-                    src: "audio/2.mp3"
-                },
-                {
-                    title: "音乐3 - 当你孤单你会想起谁",
-                    artist: "五哥",
-                    src: "audio/3.mp3"
-                }
+                { title: "音乐1 - 最近比较烦", artist: "五哥", src: "audio/1.mp3" },
+                { title: "音乐2 - 鬼迷了心窍", artist: "五哥", src: "audio/2.mp3" },
+                { title: "音乐3 - 当你孤单你会想起谁", artist: "五哥", src: "audio/3.mp3" }
             ];
 
             const audio = new Audio();
@@ -1581,22 +1454,23 @@
             audio.volume = volume;
             volumeFill.style.width = `${volume * 100}%`;
 
+            // 音频加载失败监听
+            audio.addEventListener('error', (e) => {
+                console.error('音频加载失败，请检查文件路径:', audio.src, e);
+                alert(`音频加载失败：${audio.src}\n请确认 audio 文件夹下存在对应 mp3 文件`);
+            });
+
             function renderPlaylist() {
                 audioPlaylist.innerHTML = '';
                 audioTracks.forEach((track, index) => {
                     const trackEl = document.createElement('div');
                     trackEl.className = `audio-track ${index === currentTrackIndex ? 'active' : ''}`;
-                    trackEl.innerHTML = `
-                        <div class="audio-track-title">${track.title}</div>
-                        <div class="audio-track-artist">${track.artist}</div>
-                    `;
-                    
+                    trackEl.innerHTML = `<div class="audio-track-title">${track.title}</div><div class="audio-track-artist">${track.artist}</div>`;
                     trackEl.addEventListener('click', () => {
                         currentTrackIndex = index;
                         loadTrack();
                         playTrack();
                     });
-                    
                     audioPlaylist.appendChild(trackEl);
                 });
             }
@@ -1604,23 +1478,16 @@
             function loadTrack() {
                 const track = audioTracks[currentTrackIndex];
                 audio.src = track.src;
-                
-                document.querySelectorAll('.audio-track').forEach((el, index) => {
-                    el.classList.toggle('active', index === currentTrackIndex);
-                });
-                
-                audio.addEventListener('loadedmetadata', () => {
-                    totalTimeEl.textContent = formatTime(audio.duration);
-                }, { once: true });
+                document.querySelectorAll('.audio-track').forEach((el, i) => el.classList.toggle('active', i === currentTrackIndex));
+                audio.addEventListener('loadedmetadata', () => totalTimeEl.textContent = formatTime(audio.duration), { once: true });
             }
 
             function playTrack() {
-                // 处理自动播放失败的情况
                 audio.play().then(() => {
                     isPlaying = true;
                     playPauseBtn.textContent = '❚❚';
                 }).catch(error => {
-                    console.log('自动播放失败，请手动点击播放:', error);
+                    console.log('自动播放失败，点击播放按钮手动启动:', error);
                     isPlaying = false;
                     playPauseBtn.textContent = '▶';
                 });
@@ -1652,19 +1519,14 @@
             }
 
             function updateProgress() {
+                if (isNaN(audio.duration)) return;
                 const progress = (audio.currentTime / audio.duration) * 100;
                 progressFill.style.width = `${progress}%`;
                 progressHandle.style.left = `${progress}%`;
                 currentTimeEl.textContent = formatTime(audio.currentTime);
             }
 
-            // 音频播放结束自动切换下一首
-            audio.addEventListener('ended', () => {
-                if (isPlaying) {
-                    nextTrack();
-                }
-            });
-
+            audio.addEventListener('ended', () => isPlaying && nextTrack());
             progressBar.addEventListener('click', (e) => {
                 const rect = progressBar.getBoundingClientRect();
                 const pos = (e.clientX - rect.left) / rect.width;
@@ -1678,23 +1540,14 @@
                 volume = Math.max(0, Math.min(1, volume));
                 audio.volume = volume;
                 volumeFill.style.width = `${volume * 100}%`;
-                
-                if (volume === 0) {
-                    volumeIcon.textContent = '🔇';
-                } else if (volume < 0.5) {
-                    volumeIcon.textContent = '🔉';
-                } else {
-                    volumeIcon.textContent = '🔊';
-                }
+                volumeIcon.textContent = volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊';
             });
 
             playPauseBtn.addEventListener('click', () => {
                 if (isPlaying) {
                     pauseTrack();
                 } else {
-                    if (audio.src === '') {
-                        loadTrack();
-                    }
+                    if (!audio.src) loadTrack();
                     playTrack();
                 }
             });
@@ -1703,43 +1556,26 @@
             nextTrackBtn.addEventListener('click', nextTrack);
             audio.addEventListener('timeupdate', updateProgress);
             renderPlaylist();
-
-            // 页面加载完成后自动播放第一首音频
-            loadTrack();
-            setTimeout(() => {
-                playTrack();
-            }, 500);
+            loadTrack(); // 初始化加载第一首音频
 
             // ========== 回到顶部功能 ==========
             const backToTopBtn = document.getElementById('backToTop');
-            backToTopBtn.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-
+            backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTopBtn.style.opacity = '1';
-                    backToTopBtn.style.transform = 'translateY(0)';
-                } else {
-                    backToTopBtn.style.opacity = '0.8';
-                    backToTopBtn.style.transform = 'translateY(0)';
-                }
+                backToTopBtn.style.opacity = window.scrollY > 300 ? '1' : '0.8';
             });
 
-            // ========== 弹窗功能 ==========
+            // ========== 弹窗功能（修复截断问题） ==========
             const authorBtn = document.getElementById('authorBtn');
             const authorModal = document.getElementById('authorModal');
             const modalClose = document.getElementById('modalClose');
 
-            authorBtn.addEventListener('click', () => {
-                authorModal.classList.add('active');
-            });
-
-            modalClose.addEventListener('click', () => {
-                authorModal.classList.remove('active');
-            });
-
+            authorBtn.addEventListener('click', () => authorModal.classList.add('active'));
+            modalClose.addEventListener('click', () => authorModal.classList.remove('active'));
             authorModal.addEventListener('click', (e) => {
+                if (e.target === authorModal) authorModal.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
