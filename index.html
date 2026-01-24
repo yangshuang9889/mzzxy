@@ -4,14 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美滋滋小院</title>
-    <!-- 核心添加：自定义网页标题图标（favicon） -->
-    <!-- 方式1：ICO 格式（推荐，兼容性最好） -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- 方式2：PNG 格式（备用，如需用png图标则取消注释） -->
-    <!-- <link rel="icon" href="logo.png" type="image/png" sizes="32x32"> -->
-    <!-- 方式3：苹果设备专用（可选） -->
-    <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-
     <style>
         * {
             margin: 0;
@@ -102,7 +95,6 @@
             box-shadow: 0 0 10px rgba(0, 161, 214, 0.5);
         }
 
-        /* 音符按钮播放状态样式 */
         .music-btn.playing {
             background: linear-gradient(135deg, #ff6b6b, #feca57);
             color: #fff;
@@ -860,8 +852,8 @@
         }
 
         @keyframes modalPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); }
         }
 
         .modal-text {
@@ -964,6 +956,7 @@
             gap: 20px;
         }
 
+        /* 修复：提升回到顶部按钮的z-index，避免被footer遮挡 */
         .back-to-top {
             width: 44px;
             height: 44px;
@@ -979,6 +972,7 @@
             font-size: 20px;
             position: relative;
             overflow: hidden;
+            z-index: 1000; /* 高于footer的999 */
         }
 
         .back-to-top::before {
@@ -1158,10 +1152,9 @@
     </style>
 </head>
 <body>
-    <!-- 修复：黑白模式按钮 + 单个音符按钮 -->
     <div class="mode-switcher">
         <button class="mode-btn" id="darkModeBtn" title="黑夜模式">🌙</button>
-        <button class="mode-btn" id="lightModeBtn" title="白天模式"☀️</button>
+        <button class="mode-btn" id="lightModeBtn" title="白天模式">☀️</button>
         <button class="mode-btn music-btn" id="musicBtn" title="播放/停止音乐">🎵</button>
     </div>
 
@@ -1204,7 +1197,6 @@
             <h2 class="section-title">美滋滋小院六兄弟</h2>
             <div class="photos-wrapper">
                 <div class="photos-grid" id="photosGrid">
-                    <!-- 替换全部6个卡片的data-video链接为目标视频 -->
                     <div class="photo-card active" data-video="https://player.bilibili.com/player.html?bvid=BV1FAkuBhEUp&autoplay=1">
                         <img src="xd\1.png" alt="照片1">
                     </div>
@@ -1255,7 +1247,8 @@
                     </div>
                     <div class="audio-volume">
                         <div class="volume-icon" id="volumeIcon">🔊</div>
-                        <div class="volume-slider" id="volumeIcon" id="volumeSlider">
+                        <!-- 修复：删除重复的 id="volumeIcon" -->
+                        <div class="volume-slider" id="volumeSlider">
                             <div class="volume-fill" id="volumeFill"></div>
                         </div>
                     </div>
@@ -1289,12 +1282,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ========== 修复黑白模式切换逻辑 ==========
+            // ========== 黑白模式切换 ==========
             const body = document.body;
             const darkModeBtn = document.getElementById('darkModeBtn');
             const lightModeBtn = document.getElementById('lightModeBtn');
             
-            // 初始化模式：默认深色，优先读取本地存储
             function initMode() {
                 const savedMode = localStorage.getItem('pageMode');
                 if (savedMode === 'light') {
@@ -1318,26 +1310,21 @@
                 localStorage.setItem('pageMode', 'light');
             }
 
-            // 绑定点击事件
             darkModeBtn.addEventListener('click', enableDarkMode);
             lightModeBtn.addEventListener('click', enableLightMode);
             initMode();
 
-            // ========== 单个音符按钮：播放/停止 功能 ==========
+            // ========== 背景音乐按钮 ==========
             const musicBtn = document.getElementById('musicBtn');
-            // 替换为你的音频文件路径
             const audio = new Audio('audio/1.mp3'); 
             let isMusicPlaying = false;
 
-            // 音频播放/停止切换
             musicBtn.addEventListener('click', function() {
                 if (isMusicPlaying) {
-                    // 停止播放
                     audio.pause();
                     musicBtn.classList.remove('playing');
                     isMusicPlaying = false;
                 } else {
-                    // 开始播放
                     audio.play().then(() => {
                         musicBtn.classList.add('playing');
                         isMusicPlaying = true;
@@ -1348,13 +1335,11 @@
                 }
             });
 
-            // 音频播放结束后重置状态
             audio.addEventListener('ended', function() {
                 musicBtn.classList.remove('playing');
                 isMusicPlaying = false;
             });
 
-            // 音频加载失败提示
             audio.addEventListener('error', function() {
                 alert('音频文件加载失败，请确认路径是否正确：audio/1.mp3');
             });
@@ -1427,7 +1412,7 @@
                 }
             });
 
-            // ========== 公告区域逻辑 ==========
+            // ========== 公告关闭 ==========
             const announcement = document.getElementById('announcement');
             const announcementClose = document.getElementById('announcementClose');
             localStorage.removeItem('announcementClosed');
@@ -1437,7 +1422,7 @@
                 setTimeout(() => announcement.style.display = 'none', 300);
             });
 
-            // ========== 轮播功能 ==========
+            // ========== 轮播图 ==========
             const carousel = document.getElementById('carousel');
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -1465,7 +1450,7 @@
             nextBtn.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(currentIndex + 1); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); });
             indicators.forEach(ind => ind.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(parseInt(ind.dataset.index)); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); }));
 
-            // ========== 照片-视频联动功能 ==========
+            // ========== 照片-视频联动 ==========
             const photoCards = document.querySelectorAll('.photo-card');
             const initialImage = document.getElementById('initialImage');
             const videoIframe = document.getElementById('videoIframe');
@@ -1481,7 +1466,7 @@
                 });
             });
 
-            // ========== 底部音频播放器功能 ==========
+            // ========== 底部音频播放器 ==========
             const audioTracks = [
                 { title: "音乐1 - 最近比较烦", artist: "五哥", src: "audio/1.mp3" },
                 { title: "音乐2 - 鬼迷了心窍", artist: "五哥", src: "audio/2.mp3" },
@@ -1510,8 +1495,8 @@
             volumeFill.style.width = `${volume * 100}%`;
 
             playerAudio.addEventListener('error', (e) => {
-                console.error('音频加载失败:', audio.src, e);
-                alert(`音频加载失败：${audio.src}\n请确认 audio 文件夹下存在对应 mp3 文件`);
+                console.error('音频加载失败:', playerAudio.src, e);
+                alert(`音频加载失败：${playerAudio.src}\n请确认 audio 文件夹下存在对应 mp3 文件`);
             });
 
             function renderPlaylist() {
@@ -1533,7 +1518,9 @@
                 const track = audioTracks[currentTrackIndex];
                 playerAudio.src = track.src;
                 document.querySelectorAll('.audio-track').forEach((el, i) => el.classList.toggle('active', i === currentTrackIndex));
-                playerAudio.addEventListener('loadedmetadata', () => totalTimeEl.textContent = formatTime(playerAudio.duration), { once: true });
+                playerAudio.addEventListener('loadedmetadata', () => {
+                    totalTimeEl.textContent = formatTime(playerAudio.duration);
+                }, { once: true });
             }
 
             function playTrack() {
@@ -1612,22 +1599,41 @@
             renderPlaylist();
             loadTrack();
 
-            // ========== 回到顶部功能 ==========
+            // ========== 回到顶部 修复：确保事件绑定正常 ==========
             const backToTopBtn = document.getElementById('backToTop');
-            backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ 
+                    top: 0, 
+                    behavior: 'smooth' 
+                });
+            });
+
             window.addEventListener('scroll', () => {
                 backToTopBtn.style.opacity = window.scrollY > 300 ? '1' : '0.8';
             });
 
-            // ========== 弹窗功能 ==========
+            // ========== 作者弹窗 修复：增强事件稳定性 ==========
             const authorBtn = document.getElementById('authorBtn');
             const authorModal = document.getElementById('authorModal');
             const modalClose = document.getElementById('modalClose');
 
-            authorBtn.addEventListener('click', () => authorModal.classList.add('active'));
-            modalClose.addEventListener('click', () => authorModal.classList.remove('active'));
+            // 确保元素存在再绑定事件
+            if(authorBtn && authorModal) {
+                authorBtn.addEventListener('click', () => {
+                    authorModal.classList.add('active');
+                });
+            }
+
+            if(modalClose && authorModal) {
+                modalClose.addEventListener('click', () => {
+                    authorModal.classList.remove('active');
+                });
+            }
+
             authorModal.addEventListener('click', (e) => {
-                if (e.target === authorModal) authorModal.classList.remove('active');
+                if (e.target === authorModal) {
+                    authorModal.classList.remove('active');
+                }
             });
         });
     </script>
