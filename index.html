@@ -5,6 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美滋滋小院</title>
     <style>
+        /* 原有样式不变，新增交互提示层样式 */
+        .play-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            flex-direction: column;
+            gap: 20px;
+            cursor: pointer;
+        }
+
+        .play-prompt-text {
+            font-size: 24px;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #00a1d6, #7289da);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .play-prompt-icon {
+            font-size: 60px;
+            color: #00a1d6;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* 以下是你原有样式，无需修改 */
         * {
             margin: 0;
             padding: 0;
@@ -1093,6 +1135,12 @@
                 height: 36px;
                 font-size: 16px;
             }
+            .play-prompt-text {
+                font-size: 18px;
+            }
+            .play-prompt-icon {
+                font-size: 40px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1144,10 +1192,22 @@
             .modal-text {
                 font-size: 18px;
             }
+            .play-prompt-text {
+                font-size: 16px;
+            }
+            .play-prompt-icon {
+                font-size: 30px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 新增交互提示层 -->
+    <div class="play-prompt" id="playPrompt">
+        <div class="play-prompt-icon">▶</div>
+        <div class="play-prompt-text">点击页面任意位置开始播放音乐</div>
+    </div>
+
     <div class="mode-switcher">
         <button class="mode-btn active" id="darkModeBtn" title="黑夜模式">🌙</button>
         <button class="mode-btn" id="lightModeBtn" title="白天模式">☀️</button>
@@ -1276,6 +1336,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ========== 新增：音频自动播放交互提示逻辑 ==========
+            const playPrompt = document.getElementById('playPrompt');
+            let hasUserInteracted = false; // 标记是否有用户交互
+
+            // 用户点击提示层后，隐藏提示并自动播放音频
+            playPrompt.addEventListener('click', function() {
+                if (hasUserInteracted) return;
+                hasUserInteracted = true;
+                playPrompt.style.opacity = '0';
+                setTimeout(() => playPrompt.style.display = 'none', 300);
+                
+                // 触发音频自动播放
+                playTrack();
+            });
+
             // ========== 模式切换功能 ==========
             const body = document.body;
             const darkModeBtn = document.getElementById('darkModeBtn');
@@ -1567,15 +1642,4 @@
 
             // ========== 弹窗功能（修复截断问题） ==========
             const authorBtn = document.getElementById('authorBtn');
-            const authorModal = document.getElementById('authorModal');
-            const modalClose = document.getElementById('modalClose');
-
-            authorBtn.addEventListener('click', () => authorModal.classList.add('active'));
-            modalClose.addEventListener('click', () => authorModal.classList.remove('active'));
-            authorModal.addEventListener('click', (e) => {
-                if (e.target === authorModal) authorModal.classList.remove('active');
-            });
-        });
-    </script>
-</body>
-</html>
+            const authorModal = document.getElementById('authorModal
