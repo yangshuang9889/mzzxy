@@ -2,20 +2,13 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 1. 移动端适配（必加，影响移动端排名） -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 2. SEO 核心 Meta 标签 -->
     <title>美滋滋小院</title>
     <meta name="keywords" content="美滋滋小院,视频分享,小院日常">
     <meta name="description" content="美滋滋小院专属网页，8090向往的生活、东北农村小院，分享小院的美好生活瞬间。">
     <meta name="author" content="美滋滋小院-兄弟们">
-    <meta name="robots" content="index,follow"> <!-- 允许爬虫索引和跟踪链接 -->
-    <!-- 3. 百度/谷歌专属抓取优化 -->
-    <meta name="baidu-site-verification" content="你的百度验证码"> <!-- 替换为你的验证码 -->
-    <meta name="google-site-verification" content="你的谷歌验证码"> <!-- 替换为你的验证码 -->
-    <!-- 4. 避免重复内容（可选，指定首选域名） -->
-    <link rel="canonical" href="https://mzzxy.smlt.de5.net/index.html"> <!-- 替换为你的真实域名 -->
-    <!-- 5. 网站图标 -->
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://mzzxy.smlt.de5.net/index.html">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
@@ -416,6 +409,21 @@
             animation: gradientFlow 3s ease infinite;
         }
 
+        /* 新增：小院春晚标题样式（和原有标题保持一致） */
+        .spring-festival-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 40px 0 25px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
+            background-size: 200% 200%;
+            animation: gradientFlow 3s ease infinite;
+        }
+
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -427,6 +435,28 @@
             scrollbar-width: thin;
             scrollbar-color: #00a1d6 var(--bg-primary);
             padding-bottom: 10px;
+        }
+
+        /* 新增：小院春晚图片容器样式 */
+        .spring-festival-wrapper {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ff6b6b var(--bg-primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .spring-festival-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .spring-festival-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .spring-festival-wrapper::-webkit-scrollbar-thumb {
+            background-color: #ff6b6b;
+            border-radius: 6px;
         }
 
         .photos-wrapper::-webkit-scrollbar {
@@ -447,6 +477,16 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 15px;
             min-width: calc(140px * 6 + 15px * 5);
+            width: 100%;
+        }
+
+        /* 新增：小院春晚图片网格样式 */
+        .spring-festival-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            /* 修改：适配200px宽度的卡片 */
+            min-width: calc(200px * 2 + 15px * 1);
             width: 100%;
         }
 
@@ -481,6 +521,80 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s;
+        }
+
+        /* 修复：小院春晚图片卡片样式（固定200*267尺寸） */
+        .spring-festival-card {
+            /* 修改：固定宽高为200*267 */
+            width: 200px;
+            height: 267px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--shadow-secondary);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            border: 1px solid transparent;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .spring-festival-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 12px;
+            padding: 1px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .spring-festival-card:hover {
+            transform: translateY(-8px) scale(1.03) rotateY(5deg);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2), 0 4px 15px var(--shadow-secondary);
+            animation: springPulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes springPulseGlow {
+            0%, 100% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2), 0 4px 15px var(--shadow-secondary); }
+            50% { box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6), 0 4px 20px var(--shadow-secondary); }
+        }
+
+        .spring-festival-card:hover::before {
+            opacity: 1;
+        }
+
+        .spring-festival-card.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+            animation: springPulseGlow 2s ease-in-out infinite;
+        }
+
+        .spring-festival-card.active::before {
+            opacity: 1;
+        }
+
+        .spring-festival-card img {
+            width: 100%;
+            height: 100%;
+            /* 修改：确保图片按200*267尺寸完整显示，不拉伸 */
+            object-fit: cover;
+            filter: brightness(0.95) contrast(1.05);
+            transition: filter 0.3s;
+            transform: translateZ(10px);
+        }
+
+        .spring-festival-card:hover img {
+            filter: brightness(1.05) contrast(1.1);
         }
 
         .photo-card:hover {
@@ -1050,6 +1164,11 @@
             .photo-card {
                 height: 140px;
             }
+            /* 适配移动端：调整春晚卡片尺寸 */
+            .spring-festival-card {
+                width: 150px;
+                height: 200px;
+            }
             .video-container {
                 height: 300px;
             }
@@ -1116,6 +1235,9 @@
                 height: 36px;
                 font-size: 16px;
             }
+            .spring-festival-title {
+                font-size: 28px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1125,10 +1247,18 @@
             .photo-card {
                 height: 120px;
             }
+            /* 适配移动端：进一步调整春晚卡片尺寸 */
+            .spring-festival-card {
+                width: 120px;
+                height: 160px;
+            }
             .video-container {
                 height: 200px;
             }
             .section-title {
+                font-size: 24px;
+            }
+            .spring-festival-title {
                 font-size: 24px;
             }
             .announcement {
@@ -1221,22 +1351,35 @@
                 <div class="photos-wrapper">
                     <div class="photos-grid" id="photosGrid">
                         <div class="photo-card active" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
-                            <img src="xd\1.png" alt="美滋滋小院六兄弟照片1" title="六兄弟照片1">
+                            <img src="xd\1.png" alt="美滋滋小院六兄弟照片1" title="斌">
                         </div>
                         <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
-                            <img src="xd\2.png" alt="美滋滋小院六兄弟照片2" title="六兄弟照片2">
+                            <img src="xd\2.png" alt="美滋滋小院六兄弟照片2" title="大鸽">
                         </div>
                         <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
-                            <img src="xd\3.png" alt="美滋滋小院六兄弟照片3" title="六兄弟照片3">
+                            <img src="xd\3.png" alt="美滋滋小院六兄弟照片3" title="亮导">
                         </div>
                         <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
-                            <img src="xd\4.png" alt="美滋滋小院六兄弟照片4" title="六兄弟照片4">
+                            <img src="xd\4.png" alt="美滋滋小院六兄弟照片4" title="五哥">
                         </div>
                         <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
-                            <img src="xd\5.png" alt="美滋滋小院六兄弟照片5" title="六兄弟照片5">
+                            <img src="xd\5.png" alt="美滋滋小院六兄弟照片5" title="欣哥">
                         </div>
                         <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
-                            <img src="xd\6.png" alt="美滋滋小院六兄弟照片6" title="六兄弟照片6">
+                            <img src="xd\6.png" alt="美滋滋小院六兄弟照片6" title="小泽">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 新增：小院春晚标题和两张图片 -->
+                <h2 class="spring-festival-title">小院春晚</h2>
+                <div class="spring-festival-wrapper">
+                    <div class="spring-festival-grid" id="springFestivalGrid">
+                        <div class="spring-festival-card" data-video="https://player.bilibili.com/player.html?bvid=BV1HUFWetE7A&autoplay=1">
+                            <img src="12sx\20250128.png" alt="美滋滋小院春晚照片1" title="20250128蛇年">
+                        </div>
+                        <div class="spring-festival-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                            <img src="cw\2.png" alt="美滋滋小院春晚照片2" title="小院春晚照片2">
                         </div>
                     </div>
                 </div>
@@ -1469,21 +1612,38 @@
             nextBtn.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(currentIndex + 1); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); });
             indicators.forEach(ind => ind.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(parseInt(ind.dataset.index)); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); }));
 
-            const photoCards = document.querySelectorAll('.photo-card');
+            // 修复：重新获取所有卡片（确保包含春晚卡片），并绑定点击事件
+            const photoCards = document.querySelectorAll('.photo-card, .spring-festival-card');
             const initialImage = document.getElementById('initialImage');
             const videoIframe = document.getElementById('videoIframe');
 
+            // 修复：确保每个卡片都正确绑定点击事件
             photoCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    photoCards.forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
+                card.addEventListener('click', function() {
+                    // 移除所有卡片的active状态
+                    document.querySelectorAll('.photo-card').forEach(c => c.classList.remove('active'));
+                    document.querySelectorAll('.spring-festival-card').forEach(c => c.classList.remove('active'));
+                    // 给当前点击的卡片添加active状态
+                    this.classList.add('active');
+                    
+                    // 修复：确保视频iframe正确加载
                     initialImage.style.opacity = '0';
-                    videoIframe.src = card.dataset.video;
+                    // 先清空原有src，避免缓存问题
+                    videoIframe.src = '';
+                    // 设置新的视频链接
+                    videoIframe.src = this.dataset.video;
                     videoIframe.classList.add('loaded');
-                    setTimeout(() => initialImage.style.display = 'none', 500);
+                    // 确保封面图隐藏
+                    setTimeout(() => {
+                        initialImage.style.display = 'none';
+                    }, 500);
+                    
+                    // 调试：打印视频链接，方便排查问题
+                    console.log('播放视频：', this.dataset.video);
                 });
             });
 
+            // 音乐播放器逻辑
             const audioTracks = [
                 { title: "音乐1 - 最近比较烦", artist: "五哥", src: "audio/1.mp3" },
                 { title: "音乐2 - 鬼迷了心窍", artist: "五哥", src: "audio/2.mp3" },
@@ -1509,150 +1669,4 @@
             const volumeIcon = document.getElementById('volumeIcon');
 
             playerAudio.volume = volume;
-            volumeFill.style.width = `${volume * 100}%`;
-
-            playerAudio.addEventListener('error', (e) => {
-                console.error('音频加载失败:', playerAudio.src, e);
-                alert(`音频加载失败：${playerAudio.src}\n请确认 audio 文件夹下存在对应 mp3 文件`);
-            });
-
-            function renderPlaylist() {
-                audioPlaylist.innerHTML = '';
-                audioTracks.forEach((track, index) => {
-                    const trackEl = document.createElement('div');
-                    trackEl.className = `audio-track ${index === currentTrackIndex ? 'active' : ''}`;
-                    trackEl.innerHTML = `<div class="audio-track-title">${track.title}</div><div class="audio-track-artist">${track.artist}</div>`;
-                    trackEl.addEventListener('click', () => {
-                        currentTrackIndex = index;
-                        loadTrack();
-                        playTrack();
-                    });
-                    audioPlaylist.appendChild(trackEl);
-                });
-            }
-
-            function loadTrack() {
-                const track = audioTracks[currentTrackIndex];
-                playerAudio.src = track.src;
-                document.querySelectorAll('.audio-track').forEach((el, i) => el.classList.toggle('active', i === currentTrackIndex));
-                playerAudio.addEventListener('loadedmetadata', () => {
-                    totalTimeEl.textContent = formatTime(playerAudio.duration);
-                }, { once: true });
-            }
-
-            function playTrack() {
-                playerAudio.play().then(() => {
-                    isPlaying = true;
-                    playPauseBtn.textContent = '❚❚';
-                }).catch(error => {
-                    console.log('自动播放失败，点击播放按钮手动启动:', error);
-                    isPlaying = false;
-                    playPauseBtn.textContent = '▶';
-                });
-            }
-
-            function pauseTrack() {
-                playerAudio.pause();
-                isPlaying = false;
-                playPauseBtn.textContent = '▶';
-            }
-
-            function prevTrack() {
-                currentTrackIndex = (currentTrackIndex - 1 + audioTracks.length) % audioTracks.length;
-                loadTrack();
-                if (isPlaying) playTrack();
-            }
-
-            function nextTrack() {
-                currentTrackIndex = (currentTrackIndex + 1) % audioTracks.length;
-                loadTrack();
-                if (isPlaying) playTrack();
-            }
-
-            function formatTime(seconds) {
-                if (isNaN(seconds)) return '00:00';
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            function updateProgress() {
-                if (isNaN(playerAudio.duration)) return;
-                const progress = (playerAudio.currentTime / playerAudio.duration) * 100;
-                progressFill.style.width = `${progress}%`;
-                progressHandle.style.left = `${progress}%`;
-                currentTimeEl.textContent = formatTime(playerAudio.currentTime);
-            }
-
-            playerAudio.addEventListener('ended', () => isPlaying && nextTrack());
-            progressBar.addEventListener('click', (e) => {
-                const rect = progressBar.getBoundingClientRect();
-                const pos = (e.clientX - rect.left) / rect.width;
-                playerAudio.currentTime = pos * playerAudio.duration;
-                updateProgress();
-            });
-
-            volumeSlider.addEventListener('click', (e) => {
-                const rect = volumeSlider.getBoundingClientRect();
-                volume = (e.clientX - rect.left) / rect.width;
-                volume = Math.max(0, Math.min(1, volume));
-                playerAudio.volume = volume;
-                volumeFill.style.width = `${volume * 100}%`;
-                volumeIcon.textContent = volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊';
-            });
-
-            playPauseBtn.addEventListener('click', () => {
-                if (isPlaying) {
-                    pauseTrack();
-                } else {
-                    if (!playerAudio.src) loadTrack();
-                    playTrack();
-                }
-            });
-
-            prevTrackBtn.addEventListener('click', prevTrack);
-            nextTrackBtn.addEventListener('click', nextTrack);
-            playerAudio.addEventListener('timeupdate', updateProgress);
-            renderPlaylist();
-            loadTrack();
-
-            const backToTopBtn = document.getElementById('backToTop');
-            backToTopBtn.addEventListener('click', () => {
-                window.scrollTo({ 
-                    top: 0, 
-                    behavior: 'smooth' 
-                });
-            });
-
-            window.addEventListener('scroll', () => {
-                backToTopBtn.style.opacity = window.scrollY > 300 ? '1' : '0.8';
-            });
-
-            const authorBtn = document.getElementById('authorBtn');
-            const authorModal = document.getElementById('authorModal');
-            const modalClose = document.getElementById('modalClose');
-
-            if(authorBtn && authorModal) {
-                authorBtn.addEventListener('click', () => {
-                    authorModal.classList.add('active');
-                });
-            }
-
-            if(modalClose && authorModal) {
-                modalClose.addEventListener('click', () => {
-                    authorModal.classList.remove('active');
-                });
-            }
-
-            authorModal.addEventListener('click', (e) => {
-                if (e.target === authorModal) {
-                    authorModal.classList.remove('active');
-                }
-            });
-
-            // ========== SEO 额外优化：输出页面关键信息（供爬虫抓取） ==========
-            console.log("美滋滋小院");
-        });
-    </script>
-</body>
-</html>
+            volumeFill.style.width = `${volume * 100}%
