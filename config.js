@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ========== 1. 明暗模式切换 ==========
+    // ========== 1. 修复明暗模式切换 ==========
     const body = document.body;
     const darkModeBtn = document.getElementById('darkModeBtn');
     const lightModeBtn = document.getElementById('lightModeBtn');
@@ -186,41 +186,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialImage = document.getElementById('initialImage');
     const videoIframe = document.getElementById('videoIframe');
 
-    // 修复视频播放核心逻辑
+    // 修复视频播放核心问题
     photoCards.forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', () => {
             // 移除所有卡片的active状态
             document.querySelectorAll('.photo-card').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.spring-festival-card').forEach(c => c.classList.remove('active'));
             // 给当前点击的卡片添加active状态
-            this.classList.add('active');
+            card.classList.add('active');
             
-            // 获取视频地址
-            const videoSrc = this.dataset.video;
-            
-            // 重置iframe
+            // 重置iframe状态
             videoIframe.src = '';
-            videoIframe.style.opacity = '0';
             videoIframe.classList.remove('loaded');
-            
-            // 先隐藏封面图
-            initialImage.style.opacity = '0';
+            initialImage.style.opacity = '1';
+            initialImage.style.display = 'block';
             
             // 延迟加载视频，确保用户交互生效
             setTimeout(() => {
-                // 修复B站视频播放参数
-                videoIframe.src = videoSrc;
+                const videoUrl = card.dataset.video;
+                videoIframe.src = videoUrl;
+                videoIframe.classList.add('loaded');
+                
+                // 监听iframe加载完成
                 videoIframe.onload = function() {
-                    videoIframe.classList.add('loaded');
-                    videoIframe.style.opacity = '1';
-                    initialImage.style.display = 'none';
+                    initialImage.style.opacity = '0';
+                    setTimeout(() => initialImage.style.display = 'none', 500);
                 };
                 
                 // 视频加载错误处理
                 videoIframe.onerror = function() {
-                    alert('视频加载失败，请检查BV号是否有效或网络是否正常');
+                    alert(`视频加载失败，请检查链接是否有效：${videoUrl}`);
                     initialImage.style.opacity = '1';
-                    initialImage.style.display = 'block';
+                    videoIframe.classList.remove('loaded');
                 };
             }, 300);
         });
@@ -242,4 +239,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const audioPlaylist = document.getElementById('audioPlaylist');
     const playPauseBtn = document.getElementById('playPauseBtn');
     const prevTrackBtn = document.getElementById('prevTrackBtn');
-    const next
+    const nextTrackBtn = document.getElementById('nextTrackBtn');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalTimeEl = document.getElementById('totalTime');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+    const progressHandle = document.getElementById('progressHandle');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeFill = document.getElementById('volumeFill');
+    const volumeIcon = document.getElementById('volumeIcon');
+
+    // 初始化播放列表
+    function initPlaylist() {
+        audioPlaylist.innerHTML = '';
+        audioTracks.forEach((track, index) => {
+            const trackEl = document.createElement('div');
+            trackEl.className = `audio-track ${index === currentTrackIndex ? 'active' : ''}`;
+            trackEl.dataset.index = index;
+            trackEl.innerHTML = `
+                <div class="audio-track-title">${track.title}</div>
+                <div class="audio-track-artist">${track.artist}</div>
+            `;
+            trackEl.addEventListener('click', () => {
+                currentTrackIndex = index;
+                loadTrack();
+                playTrack();
+            });
+            audioPlaylist.appendChild(trackEl);
+        });
+    }
+
+    // 格式化时间
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return '00:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // 加载音频轨道
