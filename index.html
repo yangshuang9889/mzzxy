@@ -480,7 +480,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            min-width: calc(200px * 2 + 15px * 1); /* 修改：适配200px宽度 */
+            min-width: calc(200px * 2 + 15px * 1);
             width: 100%;
         }
 
@@ -517,10 +517,9 @@
             transition: opacity 0.3s;
         }
 
-        /* 关键修改：春晚卡片尺寸改为200*267 */
         .spring-festival-card {
-            width: 200px;  /* 固定宽度200px */
-            height: 267px; /* 固定高度267px */
+            width: 200px;
+            height: 267px;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px var(--shadow-secondary);
@@ -530,7 +529,7 @@
             border: 1px solid transparent;
             transform-style: preserve-3d;
             perspective: 1000px;
-            flex-shrink: 0; /* 防止滚动时被压缩 */
+            flex-shrink: 0;
         }
 
         .spring-festival-card::before {
@@ -577,11 +576,10 @@
             opacity: 1;
         }
 
-        /* 关键修改：图片适配200*267尺寸，不拉伸 */
         .spring-festival-card img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 保持比例，裁剪多余部分 */
+            object-fit: cover;
             filter: brightness(0.95) contrast(1.05);
             transition: filter 0.3s;
             transform: translateZ(10px);
@@ -669,6 +667,9 @@
             left: 0;
             z-index: 2;
             transition: opacity 0.5s ease;
+            /* 修复：添加B站播放必需的权限参数 */
+            allow: "autoplay; fullscreen; encrypted-media; picture-in-picture";
+            allowfullscreen: true;
         }
 
         .video-container iframe.loaded {
@@ -1158,10 +1159,9 @@
             .photo-card {
                 height: 140px;
             }
-            /* 移动端适配春晚卡片尺寸 */
             .spring-festival-card {
                 width: 160px;
-                height: 214px; /* 按200*267比例缩小 */
+                height: 214px;
             }
             .video-container {
                 height: 300px;
@@ -1241,10 +1241,9 @@
             .photo-card {
                 height: 120px;
             }
-            /* 移动端更小尺寸适配 */
             .spring-festival-card {
                 width: 120px;
-                height: 160px; /* 按200*267比例缩小 */
+                height: 160px;
             }
             .video-container {
                 height: 200px;
@@ -1297,7 +1296,7 @@
 <body>
     <header>
         <div class="mode-switcher">
-            <button class="mode-btn" id="darkModeBtn" title="黑夜模式">🌙</button>
+            <button class="mode-btn active" id="darkModeBtn" title="黑夜模式">🌙</button>
             <button class="mode-btn" id="lightModeBtn" title="白天模式">☀️</button>
             <button class="mode-btn music-btn" id="musicBtn" title="播放/停止音乐">🎵</button>
         </div>
@@ -1343,22 +1342,22 @@
                 <h2 class="section-title">美滋滋小院六兄弟</h2>
                 <div class="photos-wrapper">
                     <div class="photos-grid" id="photosGrid">
-                        <div class="photo-card active" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="photo-card active" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="xd\1.png" alt="美滋滋小院六兄弟照片1" title="斌">
                         </div>
-                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="xd\2.png" alt="美滋滋小院六兄弟照片2" title="大鸽">
                         </div>
-                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="xd\3.png" alt="美滋滋小院六兄弟照片3" title="亮导">
                         </div>
-                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="xd\4.png" alt="美滋滋小院六兄弟照片4" title="五哥">
                         </div>
-                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="xd\5.png" alt="美滋滋小院六兄弟照片5" title="欣哥">
                         </div>
-                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="xd\6.png" alt="美滋滋小院六兄弟照片6" title="小泽">
                         </div>
                     </div>
@@ -1367,10 +1366,10 @@
                 <h2 class="spring-festival-title">小院春晚</h2>
                 <div class="spring-festival-wrapper">
                     <div class="spring-festival-grid" id="springFestivalGrid">
-                        <div class="spring-festival-card" data-video="https://player.bilibili.com/player.html?bvid=BV1HUFWetE7A&autoplay=1">
+                        <div class="spring-festival-card" data-video="https://player.bilibili.com/player.html?bvid=BV1HUFWetE7A&autoplay=0">
                             <img src="12sx\20250128.png" alt="美滋滋小院春晚照片1" title="20250128蛇年">
                         </div>
-                        <div class="spring-festival-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=1">
+                        <div class="spring-festival-card" data-video="https://player.bilibili.com/player.html?bvid=BV16k6bBmEem&autoplay=0">
                             <img src="cw\2.png" alt="美滋滋小院春晚照片2" title="小院春晚照片2">
                         </div>
                     </div>
@@ -1440,6 +1439,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ========== 1. 修复明暗模式切换 ==========
             const body = document.body;
             const darkModeBtn = document.getElementById('darkModeBtn');
             const lightModeBtn = document.getElementById('lightModeBtn');
@@ -1471,6 +1471,7 @@
             lightModeBtn.addEventListener('click', enableLightMode);
             initMode();
 
+            // ========== 2. 背景音乐播放 ==========
             const musicBtn = document.getElementById('musicBtn');
             const audio = new Audio('audio/1.mp3'); 
             let isMusicPlaying = false;
@@ -1500,6 +1501,7 @@
                 alert('音频文件加载失败，请确认路径是否正确：audio/1.mp3');
             });
 
+            // ========== 3. 粒子特效 ==========
             let lastX = 0, lastY = 0;
             const particleCount = 8;
             const fireworkCount = 15;
@@ -1567,6 +1569,7 @@
                 }
             });
 
+            // ========== 4. 公告关闭 ==========
             const announcement = document.getElementById('announcement');
             const announcementClose = document.getElementById('announcementClose');
             localStorage.removeItem('announcementClosed');
@@ -1576,6 +1579,7 @@
                 setTimeout(() => announcement.style.display = 'none', 300);
             });
 
+            // ========== 5. 轮播图 ==========
             const carousel = document.getElementById('carousel');
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -1599,11 +1603,25 @@
             updateSlideActiveState();
             let autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
 
-            prevBtn.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(currentIndex - 1); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); });
-            nextBtn.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(currentIndex + 1); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); });
-            indicators.forEach(ind => ind.addEventListener('click', () => { clearInterval(autoPlay); goToSlide(parseInt(ind.dataset.index)); autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); }));
+            prevBtn.addEventListener('click', () => { 
+                clearInterval(autoPlay); 
+                goToSlide(currentIndex - 1); 
+                autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); 
+            });
+            
+            nextBtn.addEventListener('click', () => { 
+                clearInterval(autoPlay); 
+                goToSlide(currentIndex + 1); 
+                autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); 
+            });
+            
+            indicators.forEach(ind => ind.addEventListener('click', () => { 
+                clearInterval(autoPlay); 
+                goToSlide(parseInt(ind.dataset.index)); 
+                autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000); 
+            }));
 
-            // 关键修复：确保所有卡片（包括春晚）的点击事件正常绑定
+            // ========== 6. 修复视频播放 ==========
             const photoCards = document.querySelectorAll('.photo-card, .spring-festival-card');
             const initialImage = document.getElementById('initialImage');
             const videoIframe = document.getElementById('videoIframe');
@@ -1615,20 +1633,32 @@
                     document.querySelectorAll('.spring-festival-card').forEach(c => c.classList.remove('active'));
                     // 给当前点击的卡片添加active状态
                     card.classList.add('active');
+                    
                     // 显示视频，隐藏封面图
                     initialImage.style.opacity = '0';
-                    videoIframe.src = card.dataset.video;
-                    videoIframe.classList.add('loaded');
+                    // 修复：添加用户交互后再设置src，解决自动播放限制
+                    setTimeout(() => {
+                        videoIframe.src = card.dataset.video;
+                        videoIframe.classList.add('loaded');
+                    }, 300);
                     setTimeout(() => initialImage.style.display = 'none', 500);
                     
-                    // 额外保障：确保iframe加载完成
+                    // 确保iframe加载完成
                     videoIframe.onload = function() {
                         videoIframe.style.opacity = 1;
+                    }
+                    
+                    // 错误处理
+                    videoIframe.onerror = function() {
+                        alert('视频加载失败，请检查BV号是否正确');
+                        initialImage.style.opacity = '1';
+                        videoIframe.classList.remove('loaded');
+                        setTimeout(() => initialImage.style.display = 'block', 500);
                     }
                 });
             });
 
-            // 音频播放器逻辑补全
+            // ========== 7. 修复音频播放器 ==========
             const audioTracks = [
                 { title: "音乐1 - 最近比较烦", artist: "五哥", src: "audio/1.mp3" },
                 { title: "音乐2 - 鬼迷了心窍", artist: "五哥", src: "audio/2.mp3" },
@@ -1648,16 +1678,3 @@
             const totalTimeEl = document.getElementById('totalTime');
             const progressBar = document.getElementById('progressBar');
             const progressFill = document.getElementById('progressFill');
-            const progressHandle = document.getElementById('progressHandle');
-            const volumeSlider = document.getElementById('volumeSlider');
-            const volumeFill = document.getElementById('volumeFill');
-            const volumeIcon = document.getElementById('volumeIcon');
-
-            // 初始化音量
-            playerAudio.volume = volume;
-            volumeFill.style.width = `${volume * 100}%`;
-
-            // 音频加载错误处理
-            playerAudio.addEventListener('error', (e) => {
-                console.error('音频加载失败:', playerAudio.src, e);
-                alert(`音频加载失败：
