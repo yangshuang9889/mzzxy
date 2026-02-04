@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ==================== 6. 音乐播放器 ====================
+    // ==================== 6. 音乐播放器（核心修复） ====================
     const audioPlaylist = document.getElementById('audioPlaylist');
     const playPauseBtn = document.getElementById('playPause');
     const prevTrackBtn = document.getElementById('prevTrack');
@@ -180,9 +180,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 音乐列表
     const musicTracks = [
-        { title: '小院背景音乐1', artist: '纯音乐', src: 'audio/1.mp3' },
-        { title: '小院背景音乐2', artist: '纯音乐', src: 'audio/2.mp3' },
-        { title: '小院背景音乐3', artist: '纯音乐', src: 'audio/3.mp3' }
+        { title: '最近比较烦', artist: '演唱:五哥', src: 'audio/1.mp3' },
+        { title: '鬼迷心窍', artist: '演唱:五哥', src: 'audio/2.mp3' },
+        { title: '当你孤单你会想起谁', artist: '演唱:五哥', src: 'audio/3.mp3' }
     ];
 
     let currentTrack = 0;
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderPlaylist();
         
         // 加载第一首歌
-        loadTrack(currentTrack);
+        loadTrack(currentTrack, false);
         
         // 绑定音频事件
         bindAudioEvents();
@@ -223,18 +223,22 @@ document.addEventListener('DOMContentLoaded', function() {
             // 点击播放列表项
             trackEl.addEventListener('click', function() {
                 currentTrack = index;
-                loadTrack(currentTrack);
-                playTrack();
+                loadTrack(currentTrack, true);
             });
             
             audioPlaylist.appendChild(trackEl);
         });
     }
 
-    // 加载曲目
-    function loadTrack(index) {
+    // 加载曲目 - 修复核心逻辑：添加自动播放参数
+    function loadTrack(index, autoPlay = false) {
         // 验证曲目存在
         if (!musicTracks[index]) return;
+        
+        // 暂停当前播放
+        if (isPlaying) {
+            audioPlayer.pause();
+        }
         
         // 更新播放列表激活状态
         document.querySelectorAll('.audio-track').forEach((el, i) => {
@@ -250,6 +254,20 @@ document.addEventListener('DOMContentLoaded', function() {
         progressHandle.style.left = '0%';
         
         console.log(`加载曲目: ${musicTracks[index].title}`);
+        
+        // 如果需要自动播放
+        if (autoPlay) {
+            audioPlayer.play().then(() => {
+                isPlaying = true;
+                playPauseBtn.textContent = '❚❚';
+            }).catch(err => {
+                console.error("播放失败:", err);
+                alert("请先点击页面任意位置激活音频播放权限");
+            });
+        } else {
+            isPlaying = false;
+            playPauseBtn.textContent = '▶';
+        }
     }
 
     // 播放曲目
@@ -340,35 +358,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 上一曲
+        // 上一曲 - 修复：点击后自动播放
         prevTrackBtn.addEventListener('click', function() {
-            prevTrack();
+            currentTrack = (currentTrack - 1 + musicTracks.length) % musicTracks.length;
+            loadTrack(currentTrack, true);
         });
 
-        // 下一曲
+        // 下一曲 - 修复：点击后自动播放
         nextTrackBtn.addEventListener('click', function() {
-            nextTrack();
+            currentTrack = (currentTrack + 1) % musicTracks.length;
+            loadTrack(currentTrack, true);
         });
-    }
-
-    // 上一曲
-    function prevTrack() {
-        currentTrack = (currentTrack - 1 + musicTracks.length) % musicTracks.length;
-        loadTrack(currentTrack);
-        
-        if (isPlaying) {
-            playTrack();
-        }
-    }
-
-    // 下一曲
-    function nextTrack() {
-        currentTrack = (currentTrack + 1) % musicTracks.length;
-        loadTrack(currentTrack);
-        
-        if (isPlaying) {
-            playTrack();
-        }
     }
 
     // ==================== 7. 页脚功能 ====================
