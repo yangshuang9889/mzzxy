@@ -1,0 +1,31 @@
+name: Deploy Static Site to Cloudflare
+
+# 触发条件：推送到 main 分支时自动部署
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 拉取仓库代码到 GitHub 服务器
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. 安装 Node.js 环境（Wrangler 依赖 Node）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. 全局安装 Wrangler（指定版本避免兼容问题）
+      - name: Install Cloudflare Wrangler
+        run: npm install -g wrangler@4.61.0
+
+      # 4. 部署到 Cloudflare（使用 Secrets 中的 API 令牌）
+      - name: Deploy to Cloudflare Pages/Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: wrangler deploy
