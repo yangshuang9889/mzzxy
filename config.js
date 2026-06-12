@@ -180,9 +180,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 音乐列表
     const musicTracks = [
-        { title: '最近比较烦', artist: '演唱:五哥', src: 'audio/1.mp3' },
+        { title: ' 面会菜.', artist: '轻音乐', src: 'audio/1.mp3' },
         { title: '鬼迷心窍', artist: '演唱:五哥', src: 'audio/2.mp3' },
         { title: '当你孤单你会想起谁', artist: '演唱:五哥', src: 'audio/3.mp3' }
+        { title: '最近比较烦', artist: '演唱:五哥', src: 'audio/4.mp3' },
     ];
 
     let currentTrack = 0;
