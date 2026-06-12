@@ -180,9 +180,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 音乐列表
     const musicTracks = [
-        { title: ' 面会菜.', artist: '轻音乐', src: 'audio/1.mp3' },
+        { title: ' 面会菜', artist: '轻音乐', src: 'audio/1.mp3' },
         { title: '鬼迷心窍', artist: '演唱:五哥', src: 'audio/2.mp3' },
-        { title: '当你孤单你会想起谁', artist: '演唱:五哥', src: 'audio/3.mp3' }
+        { title: '当你孤单你会想起谁', artist: '演唱:五哥', src: 'audio/3.mp3' },
         { title: '最近比较烦', artist: '演唱:五哥', src: 'audio/4.mp3' }
     ];
 
@@ -372,7 +372,62 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ==================== 7. 页脚功能 ====================
+    // ==================== 7. 吹更计数器 ====================
+    function initChuigengCounter() {
+        const totalEl = document.getElementById('chuigengTotal');
+        const videoEl = document.getElementById('chuigengVideo');
+        const updateEl = document.getElementById('chuigengUpdate');
+        const progressEl = document.getElementById('chuigengProgress');
+
+        if (!totalEl) return;
+
+        function animateNumber(el, target) {
+            let current = 0;
+            const step = Math.max(1, Math.floor(target / 40));
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                el.textContent = current.toLocaleString();
+            }, 30);
+        }
+
+        fetch('chuigeng.json?t=' + Date.now())
+            .then(r => r.json())
+            .then(data => {
+                const total = data.total || 0;
+                animateNumber(totalEl, total);
+
+                if (data.latest_video && data.latest_video.title) {
+                    videoEl.textContent = '最新视频: ' + data.latest_video.title;
+                    videoEl.onclick = () => {
+                        if (data.latest_video.bvid) {
+                            window.open('https://www.bilibili.com/video/' + data.latest_video.bvid, '_blank');
+                        }
+                    };
+                    videoEl.style.cursor = 'pointer';
+                }
+
+                if (data.last_update) {
+                    updateEl.textContent = '更新于: ' + data.last_update;
+                }
+
+                // 进度条动画（满 100 为满，超过则按比例）
+                const progress = Math.min(100, (total / 100) * 100);
+                setTimeout(() => {
+                    progressEl.style.width = progress + '%';
+                }, 300);
+            })
+            .catch(err => {
+                console.warn('吹更数据加载失败:', err);
+                totalEl.textContent = '?';
+                videoEl.textContent = '数据加载失败，请检查 chuigeng.json';
+            });
+    }
+
+    // ==================== 8. 页脚功能 ====================
     // 回到顶部
     const backToTop = document.getElementById('backToTop');
     backToTop.addEventListener('click', function() {
@@ -411,6 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initThemeMode();       // 初始化主题模式
     showSlide(0);          // 初始化轮播图
     initAudioPlayer();     // 初始化音乐播放器
+    initChuigengCounter(); // 初始化吹更计数器
     // 确保视频封面图默认显示
     videoCover.style.display = 'block';
     videoCover.style.opacity = '1';
