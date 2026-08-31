@@ -415,48 +415,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchLatestVideo() {
         try {
-            // 使用B站API获取用户最新视频
-            const response = await fetch(`https://api.bilibili.com/x/space/wbi/arc/search?mid=${bilibiliUid}&ps=1&pn=1`);
-            const data = await response.json();
+            const response = await fetch('https://rsshub.app/bilibili/user/video/93851573');
+            const text = await response.text();
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(text, 'text/xml');
+            const items = xml.querySelectorAll('item');
             
-            if (data.code === 0 && data.data && data.data.list && data.data.list.vlist && data.data.list.vlist.length > 0) {
-                const latestVideo = data.data.list.vlist[0];
+            if (items.length > 0) {
+                const item = items[0];
+                const title = item.querySelector('title') ? item.querySelector('title').textContent : '';
+                const link = item.querySelector('link') ? item.querySelector('link').textContent : '';
+                const pubDate = item.querySelector('pubDate') ? item.querySelector('pubDate').textContent : '';
+                const description = item.querySelector('description') ? item.querySelector('description').textContent : '';
+                
+                const bvidMatch = link.match(/\/video\/(BV\w+)/);
+                const bvid = bvidMatch ? bvidMatch[1] : '';
+                const picMatch = description.match(/src="([^"]+)"/);
+                const pic = picMatch ? picMatch[1] : '';
+                
                 const videoInfo = {
-                    bvid: latestVideo.bvid,
-                    title: latestVideo.title,
-                    description: latestVideo.description,
-                    pic: latestVideo.pic,
-                    created: latestVideo.created,
-                    play: latestVideo.play
+                    bvid: bvid,
+                    title: title,
+                    description: '',
+                    pic: pic,
+                    created: pubDate,
+                    play: ''
                 };
                 
-                // 保存到本地存储
                 localStorage.setItem('latestBilibiliVideo', JSON.stringify(videoInfo));
                 console.log('最新视频已更新:', videoInfo.title);
-                
-                // 更新页面显示（如果有相关元素）
                 updateVideoDisplay(videoInfo);
             }
         } catch (error) {
             console.error('获取B站最新视频失败:', error);
+            const cached = localStorage.getItem('latestBilibiliVideo');
+            if (cached) {
+                updateVideoDisplay(JSON.parse(cached));
+            }
         }
     }
 
     function updateVideoDisplay(videoInfo) {
-        // 更新页面上的最新视频显示
         const latestVideoEl = document.getElementById('latestVideo');
-        if (latestVideoEl) {
+        if (!latestVideoEl) return;
+        
+        const dateStr = videoInfo.created ? new Date(videoInfo.created).toLocaleDateString('zh-CN') : '';
+        
+        if (videoInfo.pic && videoInfo.bvid) {
             latestVideoEl.innerHTML = `
                 <div class="latest-video-card">
-                    <img src="${videoInfo.pic}" alt="${videoInfo.title}">
+                    <img src="${videoInfo.pic}" alt="${videoInfo.title}" onerror="this.src='xd/6xd.png'">
                     <div class="latest-video-info">
                         <h3>${videoInfo.title}</h3>
-                        <p>播放量: ${videoInfo.play}</p>
+                        ${dateStr ? '<p>' + dateStr + '</p>' : ''}
+                        <p class="latest-video-tip">点击跳转B站观看</p>
                     </div>
                 </div>
             `;
+            latestVideoEl.style.cursor = 'pointer';
             latestVideoEl.onclick = () => {
-                window.open(`https://www.bilibili.com/video/${videoInfo.bvid}`, '_blank');
+                window.open('https://www.bilibili.com/video/' + videoInfo.bvid, '_blank');
+            };
+        } else {
+            latestVideoEl.innerHTML = `
+                <div class="latest-video-card">
+                    <img src="xd/6xd.png" alt="暂无视频">
+                    <div class="latest-video-info">
+                        <h3>${videoInfo.title || '暂未获取到最新视频'}</h3>
+                        <p class="latest-video-tip">点击前往UP主主页</p>
+                    </div>
+                </div>
+            `;
+            latestVideoEl.style.cursor = 'pointer';
+            latestVideoEl.onclick = () => {
+                window.open('https://space.bilibili.com/' + bilibiliUid, '_blank');
             };
         }
     }
