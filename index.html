@@ -53,20 +53,7 @@
             </div>
         </section>
 
-        <!-- 吹更计数器 -->
-        <section class="chuigeng-section">
-            <h2 class="section-title">🔥 吹更排行榜</h2>
-            <div class="chuigeng-card">
-                <div class="chuigeng-number" id="chuigengTotal">0</div>
-                <div class="chuigeng-label">条"吹更"评论</div>
-                <div class="chuigeng-video" id="chuigengVideo">加载中...</div>
-                <div class="chuigeng-update" id="chuigengUpdate"></div>
-                <div class="chuigeng-progress">
-                    <div class="chuigeng-progress-fill" id="chuigengProgress"></div>
-                </div>
-                <div class="chuigeng-tip">每 2 小时自动更新一次</div>
-            </div>
-        </section>
+
 
         <!-- 图片卡片区 -->
         <section class="photos-section">
@@ -111,6 +98,14 @@
                 <img src="xd/6xd.png" alt="小院封面" class="video-cover" id="videoCover" style="display: block; opacity: 1;">
                 <!-- B站视频iframe -->
                 <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <!-- 最新视频显示区 -->
+        <section class="latest-video-section">
+            <h2 class="section-title">B站最新视频</h2>
+            <div class="latest-video-container" id="latestVideo">
+                <div class="latest-video-loading">正在获取最新视频...</div>
             </div>
         </section>
 

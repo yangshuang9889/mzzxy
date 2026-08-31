@@ -372,60 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ==================== 7. 吹更计数器 ====================
-    function initChuigengCounter() {
-        const totalEl = document.getElementById('chuigengTotal');
-        const videoEl = document.getElementById('chuigengVideo');
-        const updateEl = document.getElementById('chuigengUpdate');
-        const progressEl = document.getElementById('chuigengProgress');
 
-        if (!totalEl) return;
-
-        function animateNumber(el, target) {
-            let current = 0;
-            const step = Math.max(1, Math.floor(target / 40));
-            const timer = setInterval(() => {
-                current += step;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                el.textContent = current.toLocaleString();
-            }, 30);
-        }
-
-        fetch('chuigeng.json?t=' + Date.now())
-            .then(r => r.json())
-            .then(data => {
-                const total = data.total || 0;
-                animateNumber(totalEl, total);
-
-                if (data.latest_video && data.latest_video.title) {
-                    videoEl.textContent = '最新视频: ' + data.latest_video.title;
-                    videoEl.onclick = () => {
-                        if (data.latest_video.bvid) {
-                            window.open('https://www.bilibili.com/video/' + data.latest_video.bvid, '_blank');
-                        }
-                    };
-                    videoEl.style.cursor = 'pointer';
-                }
-
-                if (data.last_update) {
-                    updateEl.textContent = '更新于: ' + data.last_update;
-                }
-
-                // 进度条动画（满 100 为满，超过则按比例）
-                const progress = Math.min(100, (total / 100) * 100);
-                setTimeout(() => {
-                    progressEl.style.width = progress + '%';
-                }, 300);
-            })
-            .catch(err => {
-                console.warn('吹更数据加载失败:', err);
-                totalEl.textContent = '?';
-                videoEl.textContent = '数据加载失败，请检查 chuigeng.json';
-            });
-    }
 
     // ==================== 8. 页脚功能 ====================
     // 回到顶部
@@ -462,11 +409,68 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ==================== 9. 自动获取B站最新视频 ====================
+    const bilibiliUid = '93851573';
+    const videoUpdateInterval = 2 * 60 * 60 * 1000; // 2小时
+
+    async function fetchLatestVideo() {
+        try {
+            // 使用B站API获取用户最新视频
+            const response = await fetch(`https://api.bilibili.com/x/space/wbi/arc/search?mid=${bilibiliUid}&ps=1&pn=1`);
+            const data = await response.json();
+            
+            if (data.code === 0 && data.data && data.data.list && data.data.list.vlist && data.data.list.vlist.length > 0) {
+                const latestVideo = data.data.list.vlist[0];
+                const videoInfo = {
+                    bvid: latestVideo.bvid,
+                    title: latestVideo.title,
+                    description: latestVideo.description,
+                    pic: latestVideo.pic,
+                    created: latestVideo.created,
+                    play: latestVideo.play
+                };
+                
+                // 保存到本地存储
+                localStorage.setItem('latestBilibiliVideo', JSON.stringify(videoInfo));
+                console.log('最新视频已更新:', videoInfo.title);
+                
+                // 更新页面显示（如果有相关元素）
+                updateVideoDisplay(videoInfo);
+            }
+        } catch (error) {
+            console.error('获取B站最新视频失败:', error);
+        }
+    }
+
+    function updateVideoDisplay(videoInfo) {
+        // 更新页面上的最新视频显示
+        const latestVideoEl = document.getElementById('latestVideo');
+        if (latestVideoEl) {
+            latestVideoEl.innerHTML = `
+                <div class="latest-video-card">
+                    <img src="${videoInfo.pic}" alt="${videoInfo.title}">
+                    <div class="latest-video-info">
+                        <h3>${videoInfo.title}</h3>
+                        <p>播放量: ${videoInfo.play}</p>
+                    </div>
+                </div>
+            `;
+            latestVideoEl.onclick = () => {
+                window.open(`https://www.bilibili.com/video/${videoInfo.bvid}`, '_blank');
+            };
+        }
+    }
+
+    // 初始化时获取一次最新视频
+    fetchLatestVideo();
+    
+    // 设置定时器，每2小时更新一次
+    setInterval(fetchLatestVideo, videoUpdateInterval);
+
     // ==================== 初始化所有功能 ====================
     initThemeMode();       // 初始化主题模式
     showSlide(0);          // 初始化轮播图
     initAudioPlayer();     // 初始化音乐播放器
-    initChuigengCounter(); // 初始化吹更计数器
     // 确保视频封面图默认显示
     videoCover.style.display = 'block';
     videoCover.style.opacity = '1';
