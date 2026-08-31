@@ -414,60 +414,71 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoUpdateInterval = 2 * 60 * 60 * 1000; // 2小时
 
     async function fetchLatestVideo() {
-        try {
-            const response = await fetch('https://rsshub.app/bilibili/user/video/93851573');
-            const text = await response.text();
-            const parser = new DOMParser();
-            const xml = parser.parseFromString(text, 'text/xml');
-            const items = xml.querySelectorAll('item');
-            
-            if (items.length > 0) {
-                const item = items[0];
-                const title = item.querySelector('title') ? item.querySelector('title').textContent : '';
-                const link = item.querySelector('link') ? item.querySelector('link').textContent : '';
-                const pubDate = item.querySelector('pubDate') ? item.querySelector('pubDate').textContent : '';
-                const description = item.querySelector('description') ? item.querySelector('description').textContent : '';
-                
-                const bvidMatch = link.match(/\/video\/(BV\w+)/);
-                const bvid = bvidMatch ? bvidMatch[1] : '';
-                const picMatch = description.match(/src="([^"]+)"/);
-                const pic = picMatch ? picMatch[1] : '';
-                
-                const videoInfo = {
-                    bvid: bvid,
-                    title: title,
-                    description: '',
-                    pic: pic,
-                    created: pubDate,
-                    play: ''
-                };
-                
-                localStorage.setItem('latestBilibiliVideo', JSON.stringify(videoInfo));
-                console.log('最新视频已更新:', videoInfo.title);
-                updateVideoDisplay(videoInfo);
+        const corsProxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?'
+        ];
+        const targetUrl = encodeURIComponent('https://api.bilibili.com/x/space/wbi/arc/search?mid=' + bilibiliUid + '&ps=1&pn=1&order=pubdate');
+
+        for (const proxy of corsProxies) {
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+
+                const response = await fetch(proxy + targetUrl, {
+                    signal: controller.signal,
+                    headers: { 'Accept': 'application/json' }
+                });
+                clearTimeout(timeout);
+
+                if (!response.ok) continue;
+
+                const data = await response.json();
+
+                if (data.code === 0 && data.data && data.data.list && data.data.list.vlist && data.data.list.vlist.length > 0) {
+                    const v = data.data.list.vlist[0];
+                    const videoInfo = {
+                        bvid: v.bvid,
+                        title: v.title,
+                        pic: v.pic,
+                        created: new Date(v.created * 1000).toLocaleDateString('zh-CN'),
+                        play: v.play
+                    };
+
+                    localStorage.setItem('latestBilibiliVideo', JSON.stringify(videoInfo));
+                    console.log('最新视频已更新:', videoInfo.title);
+                    updateVideoDisplay(videoInfo);
+                    return;
+                }
+            } catch (e) {
+                console.warn('代理失败:', proxy, e.message);
+                continue;
             }
-        } catch (error) {
-            console.error('获取B站最新视频失败:', error);
-            const cached = localStorage.getItem('latestBilibiliVideo');
-            if (cached) {
-                updateVideoDisplay(JSON.parse(cached));
-            }
+        }
+
+        console.error('所有代理均失败，使用缓存');
+        const cached = localStorage.getItem('latestBilibiliVideo');
+        if (cached) {
+            updateVideoDisplay(JSON.parse(cached));
+        } else {
+            updateVideoDisplay({ bvid: '', title: '暂未获取到视频，点击前往UP主主页', pic: 'xd/6xd.png', created: '' });
         }
     }
 
     function updateVideoDisplay(videoInfo) {
         const latestVideoEl = document.getElementById('latestVideo');
         if (!latestVideoEl) return;
-        
-        const dateStr = videoInfo.created ? new Date(videoInfo.created).toLocaleDateString('zh-CN') : '';
-        
+
+        const playStr = videoInfo.play ? '播放量: ' + videoInfo.play : '';
+        const dateStr = videoInfo.created || '';
+
         if (videoInfo.pic && videoInfo.bvid) {
             latestVideoEl.innerHTML = `
                 <div class="latest-video-card">
                     <img src="${videoInfo.pic}" alt="${videoInfo.title}" onerror="this.src='xd/6xd.png'">
                     <div class="latest-video-info">
                         <h3>${videoInfo.title}</h3>
-                        ${dateStr ? '<p>' + dateStr + '</p>' : ''}
+                        <p>${[playStr, dateStr].filter(Boolean).join(' | ')}</p>
                         <p class="latest-video-tip">点击跳转B站观看</p>
                     </div>
                 </div>
@@ -479,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             latestVideoEl.innerHTML = `
                 <div class="latest-video-card">
-                    <img src="xd/6xd.png" alt="暂无视频">
+                    <img src="${videoInfo.pic || 'xd/6xd.png'}" alt="暂无视频">
                     <div class="latest-video-info">
                         <h3>${videoInfo.title || '暂未获取到最新视频'}</h3>
                         <p class="latest-video-tip">点击前往UP主主页</p>
