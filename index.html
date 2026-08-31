@@ -105,7 +105,16 @@
         <section class="latest-video-section">
             <h2 class="section-title">B站最新视频</h2>
             <div class="latest-video-container" id="latestVideo">
-                <div class="latest-video-loading">正在获取最新视频...</div>
+                <iframe 
+                    id="biliSpaceIframe"
+                    src="//space.bilibili.com/93851573/video?order=pubdate" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    style="width:100%; height:500px; border:none; border-radius:12px;"
+                ></iframe>
+                <div class="latest-video-tip-text">
+                    <a href="https://space.bilibili.com/93851573/video?order=pubdate" target="_blank">前往UP主主页查看全部视频 →</a>
+                </div>
             </div>
         </section>
 

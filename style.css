@@ -767,8 +767,6 @@ body.light-mode .modal-content {
     padding: 20px;
     border: 1px solid var(--border-dark);
     box-shadow: 0 0 20px var(--shadow-dark);
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 body.light-mode .latest-video-container {
@@ -777,44 +775,21 @@ body.light-mode .latest-video-container {
     box-shadow: 0 0 20px var(--shadow-light);
 }
 
-.latest-video-container:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 30px var(--shadow-dark);
-}
-
-.latest-video-loading {
+.latest-video-tip-text {
     text-align: center;
-    color: #999;
-    padding: 20px;
+    padding: 15px 0 5px;
 }
 
-.latest-video-card {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.latest-video-card img {
-    width: 300px;
-    height: 169px;
-    object-fit: cover;
-    border-radius: 8px;
-    flex-shrink: 0;
-}
-
-.latest-video-info h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: var(--text-dark);
-}
-
-body.light-mode .latest-video-info h3 {
-    color: var(--text-light);
-}
-
-.latest-video-info p {
-    color: #999;
+.latest-video-tip-text a {
+    color: var(--primary-color);
+    text-decoration: none;
     font-size: 14px;
+    transition: opacity 0.3s;
+}
+
+.latest-video-tip-text a:hover {
+    opacity: 0.7;
+    text-decoration: underline;
 }
 
 /* 响应式适配 */
@@ -838,15 +813,6 @@ body.light-mode .latest-video-info h3 {
     
     .center-title {
         font-size: 28px !important;
-    }
-    
-    .latest-video-card {
-        flex-direction: column;
-    }
-    
-    .latest-video-card img {
-        width: 100%;
-        height: auto;
     }
 }
 
