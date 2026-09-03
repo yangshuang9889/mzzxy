@@ -6,6 +6,7 @@
     <title>美滋滋小院</title>
     <meta name="keywords" content="美滋滋小院,视频分享,小院日常">
     <meta name="description" content="美滋滋小院专属网页，8090向往的生活、东北农村小院">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -35,13 +36,13 @@
         <section class="carousel-section">
             <div class="carousel" id="carousel">
                 <div class="carousel-item active">
-                    <img src="lb/xy.png" alt="美滋滋小院轮播图1">
+                    <img src="lb/xy.png" alt="美滋滋小院轮播图1" loading="lazy">
                 </div>
                 <div class="carousel-item">
-                    <img src="lb/xy.png" alt="美滋滋小院轮播图2">
+                    <img src="lb/xy.png" alt="美滋滋小院轮播图2" loading="lazy">
                 </div>
                 <div class="carousel-item">
-                    <img src="lb/xy.png" alt="美滋滋小院轮播图3">
+                    <img src="lb/xy.png" alt="美滋滋小院轮播图3" loading="lazy">
                 </div>
             </div>
             <button class="carousel-btn prev-btn" id="carouselPrev">←</button>
@@ -53,39 +54,37 @@
             </div>
         </section>
 
-
-
         <!-- 图片卡片区 -->
         <section class="photos-section">
             <h2 class="section-title">美滋滋小院六兄弟</h2>
             <div class="photos-grid">
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1hpcLz2EQf&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="xd/1.png" alt="斌">
+                <div class="photo-card" data-video="xd/1.md">
+                    <img src="xd/1.png" alt="斌" loading="lazy">
                 </div>
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1hpcLz2EQf&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="xd/2.png" alt="大鸽">
+                <div class="photo-card" data-video="xd/2.md">
+                    <img src="xd/2.png" alt="大鸽" loading="lazy">
                 </div>
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1hpcLz2EQf&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="xd/3.png" alt="亮导">
+                <div class="photo-card" data-video="xd/3.md">
+                    <img src="xd/3.png" alt="亮导" loading="lazy">
                 </div>
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1hpcLz2EQf&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="xd/4.png" alt="五哥">
+                <div class="photo-card" data-video="xd/4.md">
+                    <img src="xd/4.png" alt="五哥" loading="lazy">
                 </div>
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1hpcLz2EQf&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="xd/5.png" alt="欣哥">
+                <div class="photo-card" data-video="xd/5.md">
+                    <img src="xd/5.png" alt="欣哥" loading="lazy">
                 </div>
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1hpcLz2EQf&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="xd/6.png" alt="小泽">
+                <div class="photo-card" data-video="xd/6.md">
+                    <img src="xd/6.png" alt="小泽" loading="lazy">
                 </div>
             </div>
 
             <h2 class="spring-title center-title">小院春晚</h2>
             <div class="spring-grid">
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1HUFWetE7A&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="12sx/20250128.png" alt="20250128蛇年">
+                <div class="photo-card" data-video="12sx/20250128.md">
+                    <img src="12sx/20250128.png" alt="20250128蛇年" loading="lazy">
                 </div>
-                <div class="photo-card" data-video="https://player.bilibili.com/player.html?bvid=BV1HUFWetE7A&autoplay=0&high_quality=1&danmaku=0">
-                    <img src="12sx/20250116.png" alt="20250116马年">
+                <div class="photo-card" data-video="12sx/20260116.md">
+                    <img src="12sx/20260116.png" alt="20260116马年" loading="lazy">
                 </div>
             </div>
         </section>
@@ -94,27 +93,23 @@
         <section class="video-section">
             <h2 class="section-title">视频播放</h2>
             <div class="video-container" id="videoContainer">
-                <!-- 默认封面图 - 固定显示xd/6xd.png -->
-                <img src="xd/6xd.png" alt="小院封面" class="video-cover" id="videoCover" style="display: block; opacity: 1;">
-                <!-- B站视频iframe -->
+                <img src="xd/6xd.png" alt="小院封面" class="video-cover" id="videoCover">
                 <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
             </div>
         </section>
 
-        <!-- 最新视频显示区 -->
-        <section class="latest-video-section">
-            <h2 class="section-title">B站最新视频</h2>
-            <div class="latest-video-container" id="latestVideo">
-                <iframe 
-                    id="biliSpaceIframe"
-                    src="//space.bilibili.com/93851573/video?order=pubdate" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    style="width:100%; height:500px; border:none; border-radius:12px;"
-                ></iframe>
-                <div class="latest-video-tip-text">
-                    <a href="https://space.bilibili.com/93851573/video?order=pubdate" target="_blank">前往UP主主页查看全部视频 →</a>
-                </div>
+        <!-- 游戏区域 -->
+        <section class="games-section">
+            <h2 class="section-title">小游戏</h2>
+            <div class="games-grid">
+                <a href="https://xy6.xn--yrv04v.com" target="_blank" rel="noopener noreferrer" class="game-card">
+                    <div class="game-icon">🎮</div>
+                    <div class="game-title">美滋滋小院 · 敲兄弟</div>
+                </a>
+                <a href="https://hrd.xn--yrv04v.com/" target="_blank" rel="noopener noreferrer" class="game-card">
+                    <div class="game-icon">🎮</div>
+                    <div class="game-title">美滋滋小院-小游戏-华容道</div>
+                </a>
             </div>
         </section>
 
@@ -127,7 +122,6 @@
                     <button class="audio-btn" id="prevTrack">◀◀</button>
                     <button class="audio-btn play-btn" id="playPause">▶</button>
                     <button class="audio-btn" id="nextTrack">▶▶</button>
-                    
                     <div class="progress-container">
                         <div class="time-display">
                             <span id="currentTime">00:00</span>
@@ -138,7 +132,6 @@
                             <div class="progress-handle" id="progressHandle"></div>
                         </div>
                     </div>
-                    
                     <div class="volume-control">
                         <span id="volumeIcon">🔊</span>
                         <div class="volume-slider" id="volumeSlider">
@@ -173,6 +166,6 @@
         </div>
     </div>
 
-    <script src="config.js"></script>
+    <script src="config.js" defer></script>
 </body>
 </html>
