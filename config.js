@@ -336,21 +336,17 @@ document.addEventListener('DOMContentLoaded', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    const authorBtn = document.getElementById('authorBtn');
-    const authorModal = document.getElementById('authorModal');
-    const modalClose = document.getElementById('modalClose');
+    // 提示弹窗
+    const tipModal = document.getElementById('tipModal');
+    const tipClose = document.getElementById('tipClose');
 
-    authorBtn.addEventListener('click', function() {
-        authorModal.classList.add('active');
+    tipClose.addEventListener('click', function() {
+        tipModal.classList.remove('active');
     });
 
-    modalClose.addEventListener('click', function() {
-        authorModal.classList.remove('active');
-    });
-
-    authorModal.addEventListener('click', function(e) {
-        if (e.target === authorModal) {
-            authorModal.classList.remove('active');
+    tipModal.addEventListener('click', function(e) {
+        if (e.target === tipModal) {
+            tipModal.classList.remove('active');
         }
     });
 
