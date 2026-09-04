@@ -739,6 +739,31 @@ body.light-mode footer {
 
 .status span { color: var(--primary-color); }
 
+.about-btn {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.light-mode .about-btn {
+    border-color: var(--border-light);
+    color: var(--border-light);
+}
+
+.about-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+body.light-mode .about-btn:hover {
+    background: var(--border-light);
+}
+
 .back-to-top {
     width: 44px;
     height: 44px;

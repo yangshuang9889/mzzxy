@@ -288,6 +288,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === tipModal) closeTipModal();
     });
 
+    // 关于弹窗
+    const aboutBtn = document.getElementById('aboutBtn');
+    const aboutModal = document.getElementById('aboutModal');
+    const aboutClose = document.getElementById('aboutClose');
+
+    aboutBtn.addEventListener('click', () => aboutModal.classList.add('active'));
+    aboutClose.addEventListener('click', () => aboutModal.classList.remove('active'));
+    aboutModal.addEventListener('click', function(e) {
+        if (e.target === aboutModal) aboutModal.classList.remove('active');
+    });
+
     // ==================== 初始化 ====================
     initThemeMode();
     showSlide(0);
