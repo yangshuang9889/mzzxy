@@ -910,6 +910,29 @@ body.light-mode .modal-content {
     color: transparent;
 }
 
+.tip-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.tip-time-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tip-time-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
 /* 响应式适配 */
 @media (max-width: 768px) {
     .photos-grid {

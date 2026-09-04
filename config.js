@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 视频跳转控制
+    window.seekTipVideo = function(seconds) {
+        const iframe = document.getElementById('tipVideoIframe');
+        if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage(JSON.stringify({
+                type: 'seek',
+                data: { position: seconds }
+            }), '*');
+        }
+    };
+
     // ==================== 1. 主题模式切换 ====================
     const body = document.body;
     const darkModeBtn = document.getElementById('darkModeBtn');
