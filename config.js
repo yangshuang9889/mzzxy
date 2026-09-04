@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const lightModeBtn = document.getElementById('lightModeBtn');
 
     function initThemeMode() {
-        const savedMode = localStorage.getItem('themeMode');
-        if (savedMode === 'light') {
+        if (localStorage.getItem('themeMode') === 'light') {
             switchToLightMode();
         } else {
             switchToDarkMode();
@@ -52,18 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==================== 3. 公告栏关闭 ====================
-    const announcement = document.getElementById('announcement');
-    const announcementClose = document.getElementById('announcementClose');
-
-    announcementClose.addEventListener('click', function() {
-        announcement.style.display = 'none';
+    document.getElementById('announcementClose').addEventListener('click', function() {
+        document.getElementById('announcement').style.display = 'none';
     });
 
     // ==================== 4. 轮播图功能 ====================
     const carousel = document.getElementById('carousel');
     const carouselItems = document.querySelectorAll('.carousel-item');
-    const carouselPrev = document.getElementById('carouselPrev');
-    const carouselNext = document.getElementById('carouselNext');
     const carouselIndicators = document.querySelectorAll('.indicator');
     let currentSlide = 0;
     const slideCount = carouselItems.length;
@@ -80,32 +74,18 @@ document.addEventListener('DOMContentLoaded', function() {
         currentSlide = index;
     }
 
-    carouselPrev.addEventListener('click', function() {
-        showSlide(currentSlide - 1);
-    });
-
-    carouselNext.addEventListener('click', function() {
-        showSlide(currentSlide + 1);
-    });
+    document.getElementById('carouselPrev').addEventListener('click', () => showSlide(currentSlide - 1));
+    document.getElementById('carouselNext').addEventListener('click', () => showSlide(currentSlide + 1));
 
     carouselIndicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', function() {
-            showSlide(index);
-        });
+        indicator.addEventListener('click', () => showSlide(index));
     });
 
-    let slideInterval = setInterval(() => {
-        showSlide(currentSlide + 1);
-    }, 5000);
+    let slideInterval = setInterval(() => showSlide(currentSlide + 1), 5000);
 
-    carousel.addEventListener('mouseenter', function() {
-        clearInterval(slideInterval);
-    });
-
-    carousel.addEventListener('mouseleave', function() {
-        slideInterval = setInterval(() => {
-            showSlide(currentSlide + 1);
-        }, 5000);
+    carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
+    carousel.addEventListener('mouseleave', () => {
+        slideInterval = setInterval(() => showSlide(currentSlide + 1), 5000);
     });
 
     // ==================== 5. 卡片点击（支持md和视频） ====================
@@ -119,39 +99,36 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
 
             const url = this.dataset.video;
+            const isMd = url.endsWith('.md');
+            const container = document.getElementById('mdContainer');
 
-            if (url.endsWith('.md')) {
-                videoCover.style.opacity = '0';
-                setTimeout(() => {
-                    videoCover.style.display = 'none';
+            videoCover.style.opacity = '0';
+            setTimeout(() => {
+                videoCover.style.display = 'none';
+                if (isMd) {
                     videoIframe.style.display = 'none';
-                    fetch(url)
-                        .then(res => res.text())
-                        .then(md => {
-                            let container = document.getElementById('mdContainer');
-                            if (!container) {
-                                container = document.createElement('div');
-                                container.id = 'mdContainer';
-                                container.className = 'md-container';
-                                document.getElementById('videoContainer').appendChild(container);
-                            }
-                            container.innerHTML = simpleMarkdown(md);
-                            container.style.display = 'block';
-                        });
-                }, 300);
-            } else {
-                let container = document.getElementById('mdContainer');
-                if (container) container.style.display = 'none';
-                videoCover.style.opacity = '0';
-                setTimeout(() => {
-                    videoCover.style.display = 'none';
+                    fetch(url).then(res => res.text()).then(md => {
+                        let mdContainer = container || createMdContainer();
+                        mdContainer.innerHTML = simpleMarkdown(md);
+                        mdContainer.style.display = 'block';
+                    });
+                } else {
+                    if (container) container.style.display = 'none';
                     videoIframe.style.display = '';
                     videoIframe.src = url;
                     videoIframe.classList.add('active');
-                }, 300);
-            }
+                }
+            }, 300);
         });
     });
+
+    function createMdContainer() {
+        const div = document.createElement('div');
+        div.id = 'mdContainer';
+        div.className = 'md-container';
+        document.getElementById('videoContainer').appendChild(div);
+        return div;
+    }
 
     function simpleMarkdown(text) {
         return text
@@ -204,32 +181,20 @@ document.addEventListener('DOMContentLoaded', function() {
         musicTracks.forEach((track, index) => {
             const trackEl = document.createElement('div');
             trackEl.className = `audio-track ${index === currentTrack ? 'active' : ''}`;
-            trackEl.innerHTML = `
-                <div class="track-title">${track.title}</div>
-                <div class="track-artist">${track.artist}</div>
-            `;
-            trackEl.addEventListener('click', function() {
-                currentTrack = index;
-                loadTrack(currentTrack, true);
-            });
+            trackEl.innerHTML = `<div class="track-title">${track.title}</div><div class="track-artist">${track.artist}</div>`;
+            trackEl.addEventListener('click', () => { currentTrack = index; loadTrack(currentTrack, true); });
             audioPlaylist.appendChild(trackEl);
         });
     }
 
     function loadTrack(index, autoPlay = false) {
         if (!musicTracks[index]) return;
+        if (isPlaying) audioPlayer.pause();
 
-        if (isPlaying) {
-            audioPlayer.pause();
-        }
-
-        document.querySelectorAll('.audio-track').forEach((el, i) => {
-            el.classList.toggle('active', i === index);
-        });
+        document.querySelectorAll('.audio-track').forEach((el, i) => el.classList.toggle('active', i === index));
 
         audioPlayer.src = musicTracks[index].src;
         audioPlayer.load();
-
         progressFill.style.width = '0%';
         progressHandle.style.left = '0%';
 
@@ -237,9 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
             audioPlayer.play().then(() => {
                 isPlaying = true;
                 playPauseBtn.textContent = '❚❚';
-            }).catch(() => {
-                alert("请先点击页面任意位置激活音频播放权限");
-            });
+            }).catch(() => alert("请先点击页面任意位置激活音频播放权限"));
         } else {
             isPlaying = false;
             playPauseBtn.textContent = '▶';
@@ -250,9 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         audioPlayer.play().then(() => {
             isPlaying = true;
             playPauseBtn.textContent = '❚❚';
-        }).catch(() => {
-            alert("请先点击页面任意位置激活音频播放权限");
-        });
+        }).catch(() => alert("请先点击页面任意位置激活音频播放权限"));
     }
 
     function pauseTrack() {
@@ -275,18 +236,15 @@ document.addEventListener('DOMContentLoaded', function() {
             totalTimeEl.textContent = formatTime(audioPlayer.duration);
         });
 
-        audioPlayer.addEventListener('loadedmetadata', function() {
+        audioPlayer.addEventListener('loadedmetadata', () => {
             totalTimeEl.textContent = formatTime(audioPlayer.duration);
         });
 
-        audioPlayer.addEventListener('ended', function() {
-            nextTrack();
-        });
+        audioPlayer.addEventListener('ended', nextTrack);
 
         progressBar.addEventListener('click', function(e) {
             const rect = progressBar.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            audioPlayer.currentTime = pos * audioPlayer.duration;
+            audioPlayer.currentTime = ((e.clientX - rect.left) / rect.width) * audioPlayer.duration;
         });
 
         volumeSlider.addEventListener('click', function(e) {
@@ -294,32 +252,12 @@ document.addEventListener('DOMContentLoaded', function() {
             volumeLevel = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
             audioPlayer.volume = volumeLevel;
             volumeFill.style.width = `${volumeLevel * 100}%`;
-
-            if (volumeLevel > 0.5) {
-                volumeIcon.textContent = '🔊';
-            } else if (volumeLevel > 0) {
-                volumeIcon.textContent = '🔉';
-            } else {
-                volumeIcon.textContent = '🔇';
-            }
+            volumeIcon.textContent = volumeLevel > 0.5 ? '🔊' : volumeLevel > 0 ? '🔉' : '🔇';
         });
 
-        playPauseBtn.addEventListener('click', function() {
-            if (isPlaying) {
-                pauseTrack();
-            } else {
-                playTrack();
-            }
-        });
-
-        prevTrackBtn.addEventListener('click', function() {
-            currentTrack = (currentTrack - 1 + musicTracks.length) % musicTracks.length;
-            loadTrack(currentTrack, true);
-        });
-
-        nextTrackBtn.addEventListener('click', function() {
-            nextTrack();
-        });
+        playPauseBtn.addEventListener('click', () => isPlaying ? pauseTrack() : playTrack());
+        prevTrackBtn.addEventListener('click', () => { currentTrack = (currentTrack - 1 + musicTracks.length) % musicTracks.length; loadTrack(currentTrack, true); });
+        nextTrackBtn.addEventListener('click', nextTrack);
     }
 
     function initAudioPlayer() {
@@ -331,8 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==================== 7. 页脚功能 ====================
-    const backToTop = document.getElementById('backToTop');
-    backToTop.addEventListener('click', function() {
+    document.getElementById('backToTop').addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
@@ -341,20 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const tipClose = document.getElementById('tipClose');
     const tipVideoIframe = document.getElementById('tipVideoIframe');
 
-    let tipVideoTimer = null;
-
-    tipClose.addEventListener('click', function() {
+    function closeTipModal() {
         tipModal.classList.remove('active');
         tipVideoIframe.src = '';
-        clearTimeout(tipVideoTimer);
-    });
+    }
 
+    tipClose.addEventListener('click', closeTipModal);
     tipModal.addEventListener('click', function(e) {
-        if (e.target === tipModal) {
-            tipModal.classList.remove('active');
-            tipVideoIframe.src = '';
-            clearTimeout(tipVideoTimer);
-        }
+        if (e.target === tipModal) closeTipModal();
     });
 
     // ==================== 初始化 ====================
