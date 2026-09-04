@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==================== 5. 卡片点击（支持md和视频） ====================
-    const photoCards = document.querySelectorAll('.photo-card');
+    const photoCards = document.querySelectorAll('.photo-card, .theater-card');
     const videoCover = document.getElementById('videoCover');
     const videoIframe = document.getElementById('videoIframe');
 
