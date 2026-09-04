@@ -343,44 +343,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let tipVideoTimer = null;
 
-    function startTipVideoControl() {
-        setTimeout(() => {
-            if (tipVideoIframe && tipVideoIframe.contentWindow) {
-                tipVideoIframe.contentWindow.postMessage(JSON.stringify({
-                    type: 'seek',
-                    data: { position: 15 }
-                }), '*');
-                tipVideoIframe.contentWindow.postMessage(JSON.stringify({
-                    type: 'play'
-                }), '*');
-            }
-        }, 2000);
-
-        tipVideoTimer = setTimeout(() => {
-            if (tipVideoIframe && tipVideoIframe.contentWindow) {
-                tipVideoIframe.contentWindow.postMessage(JSON.stringify({
-                    type: 'pause'
-                }), '*');
-            }
-        }, 310000);
-    }
-
-    startTipVideoControl();
-
     tipClose.addEventListener('click', function() {
         tipModal.classList.remove('active');
-        if (tipVideoIframe) {
-            tipVideoIframe.contentWindow.postMessage(JSON.stringify({ type: 'pause' }), '*');
-        }
         clearTimeout(tipVideoTimer);
     });
 
     tipModal.addEventListener('click', function(e) {
         if (e.target === tipModal) {
             tipModal.classList.remove('active');
-            if (tipVideoIframe) {
-                tipVideoIframe.contentWindow.postMessage(JSON.stringify({ type: 'pause' }), '*');
-            }
             clearTimeout(tipVideoTimer);
         }
     });
