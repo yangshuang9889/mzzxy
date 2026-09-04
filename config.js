@@ -339,14 +339,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // 提示弹窗
     const tipModal = document.getElementById('tipModal');
     const tipClose = document.getElementById('tipClose');
+    const tipVideoIframe = document.getElementById('tipVideoIframe');
 
     tipClose.addEventListener('click', function() {
         tipModal.classList.remove('active');
+        if (tipVideoIframe) {
+            tipVideoIframe.src = '';
+        }
     });
 
     tipModal.addEventListener('click', function(e) {
         if (e.target === tipModal) {
             tipModal.classList.remove('active');
+            if (tipVideoIframe) {
+                tipVideoIframe.src = '';
+            }
         }
     });
 
