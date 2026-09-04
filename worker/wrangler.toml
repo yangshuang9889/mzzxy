@@ -1,7 +1,0 @@
-name = "hrd-api"
-main = "index.js"
-compatibility_date = "2024-01-01"
-
-[[kv_namespaces]]
-binding = "KV"
-id = "720347b719384dc4be3f5d0f902cdb92"
