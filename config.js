@@ -89,16 +89,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==================== 5. 卡片点击（支持md和视频） ====================
-    const photoCards = document.querySelectorAll('.photo-card, .theater-card');
+    const photoCards = document.querySelectorAll('.photo-card, .theater-card, .theater-card-vertical');
     const videoCover = document.getElementById('videoCover');
     const videoIframe = document.getElementById('videoIframe');
 
     photoCards.forEach(card => {
         card.addEventListener('click', function() {
+            const url = this.dataset.video;
+
+            if ((this.classList.contains('theater-card') || this.classList.contains('theater-card-vertical')) && url.endsWith('.md')) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = url.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                return;
+            }
+
             photoCards.forEach(c => c.classList.remove('active'));
             this.classList.add('active');
-
-            const url = this.dataset.video;
             const isMd = url.endsWith('.md');
             const container = document.getElementById('mdContainer');
 
