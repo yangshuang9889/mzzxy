@@ -97,13 +97,19 @@ document.addEventListener('DOMContentLoaded', function() {
         card.addEventListener('click', function() {
             const url = this.dataset.video;
 
-            if ((this.classList.contains('theater-card') || this.classList.contains('theater-card-vertical')) && url.endsWith('.md')) {
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = url.split('/').pop();
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+            if (this.classList.contains('theater-card-vertical') && url.endsWith('.md')) {
+                fetch(url).then(res => res.text()).then(content => {
+                    const link = content.trim();
+                    if (link) {
+                        const a = document.createElement('a');
+                        a.href = link;
+                        a.target = '_blank';
+                        a.download = '';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                });
                 return;
             }
 
